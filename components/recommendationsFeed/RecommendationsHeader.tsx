@@ -48,7 +48,7 @@ const RecommendationsHeader = () => {
           lg:justify-between
         ">
           <p className="text-sm font-bold">From liked</p>
-          <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold">Suggestions</h1>
+          <h1 className="text-4xl md:text-5xl lg:text-8xl font-bold">Suggestions</h1>
           <p className="text-sm font-bold">From liked</p>
         </div>
       </div>

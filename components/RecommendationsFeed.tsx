@@ -1,14 +1,14 @@
-import RecommendationsHeader from "./recommendationsList/RecommendationsHeader";
-import RecommendationsLabelBar from "./recommendationsList/RecommendationsLabelBar";
-
+import Tooltip from "./Tooltip";
+import RecommendationsHeader from "./recommendationsFeed/RecommendationsHeader";
+import RecommendationsLabelBar from "./recommendationsFeed/RecommendationsLabelBar";
 
 const RecommendationsFeed = () => {
+
   return (
     <div>
       <RecommendationsHeader />
       <RecommendationsLabelBar/>
-      <p>hello world</p>
-      <p>{"hello world"}</p>
+      <Tooltip message={"tooltip"} children={(<div>hello</div>)}/>
     </div>
   )
 }
