@@ -1,5 +1,7 @@
+
 const RecommendationsLabelBar = () => {
-  return (
+   
+   return (
     <>
     <div 
       className="
@@ -9,7 +11,6 @@ const RecommendationsLabelBar = () => {
         from-indigo-950
         to-neutral-900
       ">
-      
      
     </div>
     <hr className="h-px bg-stone-800 border-0"/>

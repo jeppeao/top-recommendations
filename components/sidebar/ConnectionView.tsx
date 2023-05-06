@@ -26,6 +26,7 @@ const ConnectionView = () => {
               onClick={()=> {}} 
               label={"Not signed in"} 
               icon={<BsSpotify size={32}/>}
+              disabled={true}
             />
         }
         {

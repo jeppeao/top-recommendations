@@ -2,6 +2,7 @@ import SpotifyProvider from "next-auth/providers/spotify";
 import { LOGIN_URL } from "../../../lib/spotify";
 import spotifyApi from "../../../lib/spotify";
 import NextAuth from "next-auth/next";
+import { Session } from "next-auth";
 
 async function refreshAccessToken(token: any) {
   try {
@@ -59,12 +60,11 @@ export const authOptions = {
       return await refreshAccessToken(token)
     },
 
-    async session({ session, token }: any) {
+    async session({ session, token, user}: any) {
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
       session.user.username = token.username;
       session.user.provider = token.provider;
-
       return session;
     }
 

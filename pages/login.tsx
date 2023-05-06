@@ -3,7 +3,7 @@ import { BsSpotify } from "react-icons/bs";
 
 function Login( props: any) {
   const { data: session, status } = useSession();
-  console.log(props.providers)
+
   return (
     <div className="h-screen flex flex-col justify-center items-center">
         

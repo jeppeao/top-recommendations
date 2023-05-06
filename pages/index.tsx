@@ -1,6 +1,7 @@
 import RecommendationsFeed from "@/components/RecommendationsFeed"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./api/auth/[...nextauth]"
+
 export default function Home() {
 
   return (

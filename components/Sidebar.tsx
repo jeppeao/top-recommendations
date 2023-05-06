@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import ConnectionView from "./sidebar/ConnectionView";
+import SearchBar from "./sidebar/SearchBar";
 
 const Sidebar = (props: any) => {
   const { data: session, status } = useSession();
@@ -13,7 +14,7 @@ const Sidebar = (props: any) => {
         <ConnectionView />
       </div>
       <div className="bg-neutral-900 w-full grow rounded-lg">
-
+        <SearchBar />
       </div>
     </div>
   )

@@ -1,6 +1,8 @@
 import { BsFillLightbulbFill }from 'react-icons/bs'
+import UserInfo from './UserInfo';
 
 const RecommendationsHeader = () => {
+
   return (
     <div 
       className="
@@ -14,7 +16,9 @@ const RecommendationsHeader = () => {
         flex-col
         pb-4
     ">
-      <div className="h-28"></div>
+      <div className="h-28 flex justify-end">
+        <UserInfo />
+      </div>
       <div 
         className="
           grow
@@ -47,9 +51,9 @@ const RecommendationsHeader = () => {
           lg:gap-0
           lg:justify-between
         ">
-          <p className="text-sm font-bold">From liked</p>
+          <p className="text-sm font-bold"></p>
           <h1 className="text-4xl md:text-5xl lg:text-8xl font-bold">Suggestions</h1>
-          <p className="text-sm font-bold">From liked</p>
+          <p className="text-sm font-bold">From playlist Liked Songs</p>
         </div>
       </div>
     </div>

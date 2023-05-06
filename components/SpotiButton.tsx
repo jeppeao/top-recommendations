@@ -4,20 +4,28 @@ interface SpotiButtonProps {
   label?: string;
   icon: ReactNode;
   onClick: () => void;
+  disabled?: boolean;
 }
 
-const SpotiButton = ({ label, icon, onClick }: SpotiButtonProps) => {
+const SpotiButton = ({
+  label,
+  icon,
+  onClick,
+  disabled
+ }: SpotiButtonProps) => {
+
   return (
     <button 
-      className="
+      className={`
+        ${disabled ? "pointer-events-none" : ""}
         text-neutral-400
         font-bold
         flex
         items-center
         gap-4
-        hover:text-neutral-200
         max-w-full
-      "
+        hover:text-neutral-200
+      `}
       onClick={onClick}
     >
       {icon}
