@@ -22,6 +22,30 @@ const spotifyApi = new SpotifyWebApi({
   clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
 });
 
+export const getSavedTracks = async (token: string) => {
+  let tracks: {}[] = [];
+  let nextUrl = "https://api.spotify.com/v1/me/tracks?offset=0&limit=50";
+
+  while (nextUrl !== null) {
+    const response = await fetch(nextUrl, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    const data = await response.json();
+    nextUrl = data.next;
+    tracks = tracks.concat(data.items)
+    console.log("items: ", tracks.length)
+  }
+  
+  return tracks;
+}
+
+
+
+
+
+
 export default spotifyApi;
 
 export { LOGIN_URL }

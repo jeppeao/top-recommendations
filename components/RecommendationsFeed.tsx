@@ -1,4 +1,5 @@
 import Tooltip from "./Tooltip";
+import Tracklist from "./Tracklist";
 import RecommendationsHeader from "./recommendationsFeed/RecommendationsHeader";
 import RecommendationsLabelBar from "./recommendationsFeed/RecommendationsLabelBar";
 
@@ -8,7 +9,7 @@ const RecommendationsFeed = () => {
     <div>
       <RecommendationsHeader />
       <RecommendationsLabelBar/>
-      <Tooltip message={"tooltip"} children={(<div>hello</div>)}/>
+      <Tracklist />
     </div>
   )
 }
