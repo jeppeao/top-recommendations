@@ -22,31 +22,12 @@ const spotifyApi = new SpotifyWebApi({
   clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
 });
 
-// const getSavedTracks = async (token: string) => {
-//   let tracks: {}[] = [];
-//   let nextUrl = "https://api.spotify.com/v1/me/tracks?offset=0&limit=50";
-
-//   while (nextUrl !== null) {
-//     const response = await fetch(nextUrl, {
-//       headers: {
-//         Authorization: `Bearer ${token}`
-//       }
-//     });
-
-//     const data = await response.json();
-//     nextUrl = data.next;
-//     tracks = tracks.concat(data.items)
-//     console.log("items: ", tracks.length)
-//   }
-
-//   return tracks;
-// }
-
 const getSavedTracks = async (token: string) => {
   let tracks: {}[] = [];
   let limit = 50;
   let offset = 0;
   let total = 0;
+  let max_offset = 500;
   const urls = [];
 
   const getUrl = (limit: number, offset: number) => {
@@ -58,7 +39,8 @@ const getSavedTracks = async (token: string) => {
       headers: { Authorization: `Bearer ${token}`}
     });
     return response;
-  }
+  } 
+
   try {
     const res = await getResponse(getUrl(limit, offset));
     const firstData = await res.json();
@@ -66,7 +48,7 @@ const getSavedTracks = async (token: string) => {
     tracks = tracks.concat(firstData.items);
     total = firstData.total;
 
-    while (offset < total) {
+    while (offset < total && offset <= max_offset) {
       urls.push(getUrl(limit, offset));
       offset +=50;
     }
@@ -75,7 +57,7 @@ const getSavedTracks = async (token: string) => {
   }
 
   try {
-    const responses = await Promise.all(urls.map((url) => getResponse(url)))
+    const responses = await Promise.all(urls.map((url) => getResponse(url)));
     const errors = responses.filter((res) => !res.ok);
 
     if (errors.length > 0) {
@@ -91,12 +73,13 @@ const getSavedTracks = async (token: string) => {
     errors.forEach((err: Error) => console.error(err))
   }
 
-
-
-
   return tracks;
 }
 
-export default spotifyApi;
+const getRecommendations = async (token: string) => {
+  const url = "https://api.spotify.com/v1/recommendations"
 
-export { LOGIN_URL, getSavedTracks }
+}
+
+export default spotifyApi;
+export { LOGIN_URL, getSavedTracks, getRecommendations }

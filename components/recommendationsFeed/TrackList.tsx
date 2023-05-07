@@ -1,18 +1,19 @@
 import useSavedTracks from "@/hooks/useSavedTracks";
 import TrackCard from "./TrackCard";
-import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { useEffect } from "react";
+import { likedTracks } from "@/recoilAtoms/likedAtom";
 
 const TrackList = () => {
   const { data } = useSavedTracks() || '';
-  console.log("searchbar")
-  const [st, setSt] = useState('');
+  const [tracks, setTracks] = useRecoilState(likedTracks);
+
+  useEffect(() => {
+    setTracks(data);
+  }, [data])
+
   return (
     <div className="py-4 px-4">
-            <button onClick={() => st === '' ? setSt('hello') : setSt('')}
-        className="bg-green-900"
-      >
-        update
-      </button>
       {data && data.map((item: any, i: number) => {
         return <TrackCard track={item.track} key={i} order={i}/>
       })}
