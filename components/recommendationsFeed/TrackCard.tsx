@@ -24,7 +24,7 @@ const TrackCard = ({ track, order }: any) => {
           items-center
           w-10
         ">
-          {order}
+          {order + 1}
         </div>
         
         <div className="flex items-center">
