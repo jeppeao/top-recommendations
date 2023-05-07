@@ -1,15 +1,14 @@
-import Tooltip from "./Tooltip";
-import Tracklist from "./Tracklist";
 import RecommendationsHeader from "./recommendationsFeed/RecommendationsHeader";
 import RecommendationsLabelBar from "./recommendationsFeed/RecommendationsLabelBar";
+import TrackList from "./recommendationsFeed/TrackList";
 
 const RecommendationsFeed = () => {
 
   return (
-    <div>
+    <div className="h-fit" style={{minWidth: '500px'}}>
       <RecommendationsHeader />
       <RecommendationsLabelBar/>
-      <Tracklist />
+      <TrackList />
     </div>
   )
 }

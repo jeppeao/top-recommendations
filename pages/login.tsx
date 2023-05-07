@@ -22,7 +22,7 @@ function Login( props: any) {
               whitespace-nowrap
             "
             onClick={() => signIn(provider.id, {callbackUrl: "/"})}
-          >Login with {provider.name}</button>
+          >Connect with {provider.name}</button>
         </div>
       ))}
      

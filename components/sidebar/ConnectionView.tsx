@@ -24,7 +24,7 @@ const ConnectionView = () => {
           </Tooltip> : 
               <SpotiButton 
               onClick={()=> {}} 
-              label={"Not signed in"} 
+              label={"Not connected"} 
               icon={<BsSpotify size={32}/>}
               disabled={true}
             />
@@ -33,7 +33,7 @@ const ConnectionView = () => {
           session ?
             <SpotiButton 
               onClick={signOut} 
-              label={"Logout"} 
+              label={"Disconnect"} 
               icon={<AiOutlineLogout size={32}/>}
             /> : null
         }
