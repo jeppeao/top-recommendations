@@ -16,5 +16,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end();
   }
 
-  
+  const query = req.query;
+  const { track } = query;
+  console.log(track);
+  return res.status(200).json({data: track});
+
+
+
+
 }
