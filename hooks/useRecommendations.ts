@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 
 const useRecommendations = () => {
-  const [data, setData] = useState('none')
+  const [data, setData] = useState('none');
   const endpoint = '/api/spotify/getRecommendations';
 
   useEffect(() => {
-    const getData = async () => {
-      fetch('/api/spotify/getRecommendations?track=tre7')
-       .then((res) => res.json())
-       .then((res) => setData(res))   
-    }
-    getData();
+    fetch('/api/spotify/getRecommendations?track=tre7')
+      .then((res) => res.json())
+      .then((res) => setData(res))   
+
   }, [])
   return {
     data

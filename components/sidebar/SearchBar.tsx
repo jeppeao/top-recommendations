@@ -6,19 +6,28 @@ import { useRecoilValue } from "recoil";
 
 const SearchBar = () => {
   const tracks = useRecoilValue(likedTracks);
-  
+  const id = useRecommendations();
+  console.log("id: ", id)
+
   if (tracks && tracks.length > 0) {
     const firstId = (tracks[0] as any).track.id;
-    const id = useRecommendations();
-    console.log("id: ", id)
+
   }
  
 
+  const getRecommendations = () => {
 
+  }
 
   return (
-    <div className="flex justify-center h-full w-full">
-      SearchBar works!
+    <div className="flex flex-col justify-start h-full w-full">
+      <button 
+        className="text-neutral-400 bg-cyan-400"
+        onClick={getRecommendations}
+      >
+        
+        Get recommendations
+      </button>
     </div>
   );
 }
