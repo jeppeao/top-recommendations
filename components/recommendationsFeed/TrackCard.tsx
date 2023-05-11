@@ -1,7 +1,12 @@
 import { msToMinutesAndSeconds } from "@/libs/utils";
 
+interface TrackCardProps {
+  track: any;
+  order: number;
+  hits: number
+}
 
-const TrackCard = ({ track, order }: any) => {
+const TrackCard = ({ track, order, hits }: TrackCardProps) => {
   return (
     <div
       className="
@@ -64,10 +69,27 @@ const TrackCard = ({ track, order }: any) => {
         flex
         justify-end
         items-center
-        text-neutral-400
         pr-8
       ">
-        {msToMinutesAndSeconds(track.duration_ms)}
+        <div className="
+          text-neutral-400
+          grow
+          flex
+          justify-end
+          lg:justify-start
+        ">
+          { hits }
+        </div>
+        <div className="
+          hidden
+          lg:flex
+          justify-end
+          items-center
+          text-neutral-400
+          grow
+        ">
+          {msToMinutesAndSeconds(track.duration_ms)}
+        </div>
       </div>
 
     </div>

@@ -1,33 +1,38 @@
 import useRecommendations from "@/hooks/useRecommendations";
-import fetcher from "@/libs/fetcher";
-
-import { likedTracks } from "@/recoilAtoms/likedAtom";
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { rankRecommendations } from "@/libs/spotify";
+import { likedTracks, recommendedTracks } from "@/recoilAtoms/likedAtom";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const SearchBar = () => {
   const tracks = useRecoilValue(likedTracks);
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommended, setRecommended] = useRecoilState(recommendedTracks);
   const id = useRecommendations();
-  console.log("id: ", id)
 
   if (tracks && tracks.length > 0) {
     const firstId = (tracks[0] as any).track.id;
 
   }
  
+  const loadRecommendations = async () => {
+    const recommendations = await fetch('/api/spotify/getRecommendations?track=tre7')
+    .then((res) => res.json());
 
-  const loadRecommendations = () => {
-    const recommendations = fetch('/api/spotify/getRecommendations?track=tre7')
-    .then((res) => res.json())
-    .then((res) => console.log(res, typeof res))   
+    return recommendations;
   }
 
+  const onGetRankedClick = async () => {
+    const recs = await loadRecommendations();
+    let r2 = [...recs, recs[14], recs[3], recs[3]]
+    const ranked = rankRecommendations(r2, tracks);
+    setRecommended(ranked as any);
+
+  }
+  
   return (
     <div className="flex flex-col justify-start h-full w-full">
       <button 
         className="text-neutral-400 bg-cyan-400"
-        onClick={loadRecommendations}
+        onClick={onGetRankedClick}
       >
         
         Get recommendations

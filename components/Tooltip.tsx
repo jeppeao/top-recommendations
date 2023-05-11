@@ -16,7 +16,7 @@ const Tooltip = ({ message, children }: TooltipProps) => {
           group-hover:opacity-100
           group-hover:delay-200
           transition-opacity
-          -top-7
+          -top-8
           left-1/2
           -translate-x-1/2
           rounded

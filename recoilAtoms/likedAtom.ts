@@ -5,3 +5,7 @@ export const likedTracks = atom({
   default: []
 });
 
+export const recommendedTracks = atom({
+  key: "recommendedTracks",
+  default: []
+});

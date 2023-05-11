@@ -1,5 +1,14 @@
 import SpotifyWebApi from "spotify-web-api-node"
 
+interface CountedRecommendation {
+  recommendation: any;
+  count: number
+}
+
+interface CountedRecommendations {
+  [key: string] : CountedRecommendation;
+}
+
 const scopes = [
   "playlist-read-private",
   "streaming",
@@ -7,26 +16,23 @@ const scopes = [
   "user-read-email"
 ].join(',');
 
-const params = {
-  scope: scopes,
-}
-
-const queryParamString = new URLSearchParams(params);
+const queryParamString = new URLSearchParams({scope: scopes});
 
 const LOGIN_URL =
   "https://accounts.spotify.com/authorize?" +
    queryParamString.toString();
-
-const getResponse = async (url: string, token: string) => {
-    const response = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}`}
-    });
-    return response;
-  } 
+   
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID,
   clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
 });
+
+const getResponse = async (url: string, token: string) => {
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}`}
+  });
+  return response;
+} 
 
 const getSavedTracks = async (token: string) => {
   let tracks: {}[] = [];
@@ -36,6 +42,9 @@ const getSavedTracks = async (token: string) => {
   let max_offset = 500;
   const urls = [];
 
+  // Because of api limit of 50 songs per request 
+  // first fetch is used to read total number of songs
+  // then urls for fetching all saved songs are prepared
   const getUrl = (limit: number, offset: number) => {
     return `https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=${limit}`
   }
@@ -55,6 +64,7 @@ const getSavedTracks = async (token: string) => {
     console.error(error);
   }
 
+  // Now fetch all songs not in first batch
   try {
     const responses = await Promise.all(urls.map((url) => getResponse(url, token)));
     const errors = responses.filter((res) => !res.ok);
@@ -95,8 +105,28 @@ const getRecommendations = async (token: string) => {
   } catch (error) {
     console.error(error);
   }
+}
 
+const rankRecommendations = (recommendations: any, exclude: any) => {
+  const excludeIds = exclude.map((e:any) => e.track.id);
+  const countedRecommendations: CountedRecommendations = {};
+
+  for (let rec of recommendations) {
+    const id = rec.id;
+    if (countedRecommendations[id]) {
+      countedRecommendations[id].count += 1;
+    }
+    else if (!excludeIds.includes(id)) {
+      countedRecommendations[id] = {recommendation: rec, count: 1}
+    }
+  }
+  const recList = Object.values(countedRecommendations);
+  const rankedRecommendations = recList.sort((a, b) => {
+    return b.count - a.count;
+  });
+  
+  return rankedRecommendations;
 }
 
 export default spotifyApi;
-export { LOGIN_URL, getSavedTracks, getRecommendations }
+export { LOGIN_URL, getSavedTracks, getRecommendations, rankRecommendations }

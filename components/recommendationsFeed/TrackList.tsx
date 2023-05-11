@@ -15,7 +15,7 @@ const TrackList = () => {
   return (
     <div className="py-4 px-4">
       {data && data.map((item: any, i: number) => {
-        return <TrackCard track={item.track} key={i} order={i}/>
+        return <TrackCard track={item.track} key={i} order={i} hits={1}/>
       })}
     </div>
   );
