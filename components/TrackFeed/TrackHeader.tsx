@@ -1,7 +1,7 @@
 import { BsFillLightbulbFill }from 'react-icons/bs'
 import UserInfo from './UserInfo';
 
-const RecommendationsHeader = () => {
+const TrackHeader = () => {
 
   return (
     <div 
@@ -61,4 +61,4 @@ const RecommendationsHeader = () => {
   )
 }
 
-export default RecommendationsHeader;
+export default TrackHeader;

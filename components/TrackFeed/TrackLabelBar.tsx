@@ -2,7 +2,7 @@ import Tooltip from "../Tooltip";
 import { BiTime } from "react-icons/bi"
 import { CgSearchFound } from "react-icons/cg"
 
-const RecommendationsLabelBar = () => {
+const TrackLabelBar = (forPlaylist?: any) => {
   return (
     <>
     <div 
@@ -42,15 +42,15 @@ const RecommendationsLabelBar = () => {
 
           pr-7
         ">
-        <div className="
-          flex
+        <div className={`
+          ${forPlaylist ? 'hidden' : 'flex'}
           justify-end
           lg:justify-start
           items-center
           text-neutral-400
           grow
           pl-2
-        ">
+        `}>
         #
         <Tooltip message="number of recommendations">
           <CgSearchFound size={20}/>
@@ -76,4 +76,4 @@ const RecommendationsLabelBar = () => {
   )
 }
 
-export default RecommendationsLabelBar;
+export default TrackLabelBar;

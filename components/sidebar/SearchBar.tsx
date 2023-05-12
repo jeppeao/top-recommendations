@@ -1,6 +1,7 @@
 import useRecommendations from "@/hooks/useRecommendations";
 import { rankRecommendations } from "@/libs/spotify";
-import { likedTracks, recommendedTracks } from "@/recoilAtoms/likedAtom";
+import { likedTracks } from "@/recoilAtoms/likedAtom";
+import { recommendedTracks } from "@/recoilAtoms/recommendedAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 const SearchBar = () => {
@@ -10,7 +11,6 @@ const SearchBar = () => {
 
   if (tracks && tracks.length > 0) {
     const firstId = (tracks[0] as any).track.id;
-
   }
  
   const loadRecommendations = async () => {

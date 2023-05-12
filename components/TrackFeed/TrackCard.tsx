@@ -3,10 +3,11 @@ import { msToMinutesAndSeconds } from "@/libs/utils";
 interface TrackCardProps {
   track: any;
   order: number;
-  hits: number
+  hits?: number;
+  inPlaylist?: boolean;
 }
 
-const TrackCard = ({ track, order, hits }: TrackCardProps) => {
+const TrackCard = ({ track, order, hits, inPlaylist }: TrackCardProps) => {
   return (
     <div
       className="
@@ -78,7 +79,7 @@ const TrackCard = ({ track, order, hits }: TrackCardProps) => {
           justify-end
           lg:justify-start
         ">
-          { hits }
+          { hits || "" }
         </div>
         <div className="
           hidden
