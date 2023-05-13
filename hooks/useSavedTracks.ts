@@ -1,10 +1,10 @@
-import useSWR from 'swr';
 import fetcher from "@/libs/fetcher";
+import useSWRImmutable from 'swr';
 
 const useSavedTracks = () => {
   const url = '/api/spotify/getSavedTracks';
-  const { data, error, isLoading, mutate } = useSWR(url, fetcher);
-
+  let { data, error, isLoading, mutate } = useSWRImmutable(url, fetcher);
+  
   return {
     data,
     error,

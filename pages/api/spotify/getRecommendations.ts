@@ -17,11 +17,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end();
   }
 
+  const { trackId } = req.query;
+
+  if (typeof trackId !== 'string') {
+    console.log("Bad or missing query parameter trackId");
+    return res.status(400).end();
+  }
+
   try {
     const token = spotifyApi.getAccessToken();
     if (token) {
-      const data = await getRecommendations(token);
-
+      const data = await getRecommendations(token, trackId);
       return res.status(200).json(data);
     }
 
@@ -32,11 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log(error);
     return res.status(400).end();
   }
-  // const query = req.query;
-  // const { track } = query;
-  // console.log(track);
-  // return res.status(200).json({data: track});
-
 
 
 

@@ -1,4 +1,4 @@
-import TrackFeed from "@/components/TrackFeed"
+import RecommendationsView from "@/components/RecommendationsView"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./api/auth/[...nextauth]"
 import { useRecoilState, useRecoilValue } from "recoil"
@@ -6,28 +6,26 @@ import { currentTracks } from "@/recoilAtoms/currentTracksAtom"
 import { likedTracks } from "@/recoilAtoms/likedAtom"
 import useSavedTracks from "@/hooks/useSavedTracks"
 import { useEffect } from "react"
+import { recommendedTracks } from "@/recoilAtoms/recommendedAtom"
 
 export default function Home() {
   const tracks = useRecoilValue(currentTracks);
   const [liked, setLiked] = useRecoilState(likedTracks);
-   const { data } = useSavedTracks() || '';
-
+  const { data } = useSavedTracks() || '';
+  const recommended = useRecoilValue(recommendedTracks);
+  
   useEffect(() => {
     setLiked(data);
   }, [data])
 
-  return (
-    <TrackFeed tracks={liked} isRecommendations={false}/>
-  )
-
-  if (tracks.length > 0) {
+  if (recommended.length > 0) {
     return (
-      <TrackFeed tracks={liked} isRecommendations={false}/>
+      <RecommendationsView tracks={recommended} />
     )
   }
 
   return (
-    <h1 className="min-h-full">Add some tracks</h1>
+    <p>Add some tracks</p>
   )
 }
 

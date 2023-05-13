@@ -2,7 +2,7 @@ import Tooltip from "../Tooltip";
 import { BiTime } from "react-icons/bi"
 import { CgSearchFound } from "react-icons/cg"
 
-const TrackLabelBar = (forPlaylist?: any) => {
+const TrackLabelBar = () => {
   return (
     <>
     <div 
@@ -43,7 +43,7 @@ const TrackLabelBar = (forPlaylist?: any) => {
           pr-7
         ">
         <div className={`
-          ${forPlaylist ? 'hidden' : 'flex'}
+          flex
           justify-end
           lg:justify-start
           items-center

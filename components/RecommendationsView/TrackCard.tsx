@@ -3,11 +3,10 @@ import { msToMinutesAndSeconds } from "@/libs/utils";
 interface TrackCardProps {
   track: any;
   order: number;
-  hits?: number;
-  inPlaylist?: boolean;
+  hits: number;
 }
 
-const TrackCard = ({ track, order, hits, inPlaylist }: TrackCardProps) => {
+const TrackCard = ({ track, order, hits }: TrackCardProps) => {
   return (
     <div
       className="
@@ -51,27 +50,13 @@ const TrackCard = ({ track, order, hits, inPlaylist }: TrackCardProps) => {
         </div>
       </div>
       <div 
-        className="
-          col-span-2
-          hidden
-          md:flex
-          md:items-center
-        ">
-        <div className="
-          truncate
-          text-ellipsis
-          text-neutral-400
-          text-sm
+        className="col-span-2 hidden md:flex md:items-center">
+        <div className="truncate text-ellipsis text-neutral-400 text-sm
         ">
           {track.album.name}
         </div>
       </div>
-      <div className="
-        flex
-        justify-end
-        items-center
-        pr-8
-      ">
+      <div className="flex justify-end items-center pr-8">
         <div className="
           text-neutral-400
           grow
@@ -79,7 +64,7 @@ const TrackCard = ({ track, order, hits, inPlaylist }: TrackCardProps) => {
           justify-end
           lg:justify-start
         ">
-          { hits || "" }
+          { hits }
         </div>
         <div className="
           hidden

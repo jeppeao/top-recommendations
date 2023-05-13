@@ -4,9 +4,7 @@ import Tooltip from "../Tooltip";
 
 const UserInfo = ( user?: any ) => {
   const { data: session } = useSession();
-  
   const imgSrc = session?.user?.image === null ? undefined : session?.user?.image;
-
 
   return (
     
