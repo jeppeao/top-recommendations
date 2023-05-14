@@ -35,12 +35,12 @@ const TrackCard = ({ track, order, hits }: TrackCardProps) => {
         <div className="flex items-center">
           <img
             className="object-contain h-12 w-12 min-w-fit"
-            src={track.album.images[2].url}
+            src={track?.album?.images[2] ? track.album.images[2].url : ''}
             alt="Cover"
           />
         </div>
 
-        <div className="h-full flex flex-col justify-center gap-1 truncate">
+        <div className="h-full flex flex-col justify-center gap-1 truncate text-neutral-200">
           <div className="text-md text-ellipsis truncate">
             {track.name}
           </div>

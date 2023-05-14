@@ -40,7 +40,7 @@ const TrackHeader = () => {
             justify-center
             items-center
         ">
-          <BsFillLightbulbFill size={64}/>
+          <BsFillLightbulbFill size={64} className='text-neutral-200'/>
         </div>
         <div className="
           h-full 
@@ -51,9 +51,9 @@ const TrackHeader = () => {
           lg:gap-0
           lg:justify-between
         ">
-          <p className="text-sm font-bold"></p>
-          <h1 className="text-4xl md:text-5xl lg:text-8xl font-bold">Suggestions</h1>
-          <p className="text-sm font-bold">From playlist Liked Songs</p>
+          <p className="text-sm font-bold text-neutral-200"></p>
+          <h1 className="text-4xl md:text-5xl lg:text-8xl font-bold text-neutral-200">Suggestions</h1>
+          <p className="text-sm font-bold text-neutral-200">From playlist Liked Songs</p>
         </div>
       </div>
     </div>

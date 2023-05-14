@@ -90,18 +90,13 @@ const getRecommendations = async (
   trackId: string
 ) => {
   const endpoint = "https://api.spotify.com/v1/recommendations"
-  // const seed_artists = "4NHQUGzhtTLFvgF5SZesLK";
-  // const seed_genres = "classical%2country";
-  // const seed_tracks = "0c6xIDDpzE81m2q797ordA";
   const url = [
     `${endpoint}`,
-    // `?seed_artists=${seed_artists}`,
-    // `&seed_genres=${seed_genres}`,
-    `?seed_tracks=${trackId}`
+    `?seed_tracks=${trackId}`,
+    `&limit=100`
   ].join("");
 
   try {
-
     const res = await getResponse(url, token);
     const data = await res.json(); 
     return data.tracks;
@@ -144,5 +139,26 @@ const getRankedRecommendations = async (
   return ranked;
 }
 
+const getAllRecommendations = async (
+  tracks: any,
+  exclude: any,
+) => {
+  const path = "/api/spotify/getRecommendations?trackId=";
+  const ids = tracks.map((track: any) => track.track.id).slice(0, 10);
+  const urls = ids.map((id:string) => path+id);
+  const responses = await Promise.all(urls.map((url:string) => fetch(url)));
+  const batches = responses.map((res) => res.json());
+  const data = (await Promise.all(batches)).flat();
+  const ranked = rankRecommendations(data, tracks);
+  return ranked;
+}
+
 export default spotifyApi;
-export { LOGIN_URL, getSavedTracks, getRecommendations, rankRecommendations, getRankedRecommendations }
+export { 
+  LOGIN_URL, 
+  getSavedTracks, 
+  getRecommendations, 
+  rankRecommendations, 
+  getRankedRecommendations,
+  getAllRecommendations
+}

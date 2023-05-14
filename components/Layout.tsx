@@ -7,7 +7,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="h-screen max-h-full bg-black flex flex-col">
-      <div className="flex w-full p-2 gap-2 overflow-hidden">
+      <div className="flex w-full h-[100vh] p-2 gap-2 overflow-hidden">
 
         <Sidebar/> 
         <div className="
@@ -19,9 +19,6 @@ const Layout = ({ children }: LayoutProps) => {
         ">
           {children}
         </div>
-      </div>
-      <div className="h-20 shrink-0">
-
       </div>
     </div>
   )
