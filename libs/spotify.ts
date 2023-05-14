@@ -106,7 +106,11 @@ const getRecommendations = async (
   }
 }
 
-const rankRecommendations = (recommendations: any, exclude: any) => {
+const rankRecommendations = (
+  recommendations: any, 
+  exclude: any,
+  maxLength = 200
+  ) => {
   const excludeIds = exclude.map((e:any) => e.track.id);
   const countedRecommendations: CountedRecommendations = {};
 
@@ -124,12 +128,12 @@ const rankRecommendations = (recommendations: any, exclude: any) => {
     return b.count - a.count;
   });
   
-  return rankedRecommendations;
+  return rankedRecommendations.slice(0, maxLength);
 }
 
 const getRankedRecommendations = async (
   tracks: any,
-  exclude: any
+  exclude: any,
 ) => {
   const url = `/api/spotify/getRecommendations?trackId=${tracks[0].track.id}`;
   const recommendations = await fetch(url)
@@ -139,18 +143,51 @@ const getRankedRecommendations = async (
   return ranked;
 }
 
-const getAllRecommendations = async (
+const getRecommendationsFromMultiple = async (
   tracks: any,
   exclude: any,
 ) => {
   const path = "/api/spotify/getRecommendations?trackId=";
-  const ids = tracks.map((track: any) => track.track.id).slice(0, 10);
+  const ids = tracks.map((track: any) => track.track.id);
   const urls = ids.map((id:string) => path+id);
   const responses = await Promise.all(urls.map((url:string) => fetch(url)));
   const batches = responses.map((res) => res.json());
   const data = (await Promise.all(batches)).flat();
-  const ranked = rankRecommendations(data, tracks);
-  return ranked;
+  
+  return data;
+}
+
+const delayedPromise = (delay: number, fn: any) => {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res(fn());
+    }, delay);
+  })
+}
+
+const getRecommendationsRateLimited = async (
+  tracks: any,
+  exclude: any,
+  callsPerSecond = 50
+) => {
+  let offset = 0;
+  let delay = 0;
+  let batchSize = Math.min(Math.max(1, callsPerSecond), 50);
+  let batches = [];
+  tracks = tracks.slice(0, 200);
+  
+   while (offset < tracks.length) {
+     let batch = tracks.slice(offset, offset+batchSize);
+     const delayed = delayedPromise(
+       delay,
+       () => getRecommendationsFromMultiple(batch, tracks)
+     );
+     batches.push(delayed);
+     offset += batchSize;
+     delay += 1000;
+   }
+  const responses = await Promise.all(batches);
+  return responses.flat();
 }
 
 export default spotifyApi;
@@ -160,5 +197,6 @@ export {
   getRecommendations, 
   rankRecommendations, 
   getRankedRecommendations,
-  getAllRecommendations
+  getRecommendationsFromMultiple,
+  getRecommendationsRateLimited
 }
