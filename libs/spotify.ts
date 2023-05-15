@@ -9,6 +9,11 @@ interface CountedRecommendations {
   [key: string] : CountedRecommendation;
 }
 
+const ENDPOINTS = {
+  savedTracks: "https://api.spotify.com/v1/me/tracks",
+  recommendations: "https://api.spotify.com/v1/recommendations"
+}
+
 const scopes = [
   "playlist-read-private",
   "streaming",
@@ -27,6 +32,33 @@ const spotifyApi = new SpotifyWebApi({
   clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
 });
 
+const atSpotify = async (
+  endpoint: string,
+  options: {[key:string]: string},
+  method: string = "GET", 
+) => {
+  const path = '/api/spotify/spotify';
+  const queryParameters = "?" + new URLSearchParams(options).toString();
+  
+  const fetchParameters = {
+    headers: {
+      "spotify-endpoint": `${endpoint}`
+    },
+    method: method
+  } 
+
+  const response = await fetch(path + queryParameters, fetchParameters);
+  return response;
+}
+
+const spotifyGetLiked = async (options: {[key:string]: string} = {}) => {
+  return atSpotify(ENDPOINTS.savedTracks, options);
+}
+
+const spotifyGetRecommended = async (options: {[key:string]: string}) => {
+  return atSpotify(ENDPOINTS.recommendations, options);
+}
+
 const getResponse = async (url: string, token: string) => {
   const response = await fetch(url, {
     headers: { Authorization: `Bearer ${token}`}
@@ -34,30 +66,27 @@ const getResponse = async (url: string, token: string) => {
   return response;
 } 
 
-const getSavedTracks = async (token: string) => {
+const getSavedTracks = async () => {
   let tracks: {}[] = [];
-  let limit = 50;
-  let offset = 0;
   let total = 0;
   let max_offset = 500;
-  const urls = [];
+  const limit = 50;
+  let offset = 0;
+  let offsets = [];
 
   // Because of api limit of 50 songs per request 
   // first fetch is used to read total number of songs
   // then urls for fetching all saved songs are prepared
-  const getUrl = (limit: number, offset: number) => {
-    return `https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=${limit}`
-  }
 
   try {
-    const res = await getResponse(getUrl(limit, offset), token);
+    const res = await spotifyGetLiked({limit: limit.toString(), offset: offset.toString()});
     const firstData = await res.json();
     offset += 50;
     tracks = tracks.concat(firstData.items);
     total = firstData.total;
 
     while (offset < total && offset <= max_offset) {
-      urls.push(getUrl(limit, offset));
+      offsets.push(offset)
       offset +=50;
     }
   } catch (error) {
@@ -66,13 +95,14 @@ const getSavedTracks = async (token: string) => {
 
   // Now fetch all songs not in first batch
   try {
-    const responses = await Promise.all(urls.map((url) => getResponse(url, token)));
+    const responses = await Promise.all(offsets.map((off) => spotifyGetLiked(
+      { limit: limit.toString(), offset: off.toString() }
+    )));
     const errors = responses.filter((res) => !res.ok);
 
     if (errors.length > 0) {
       throw errors.map((response) => Error(response.statusText));
     }
-
     const json = responses.map((res) => res.json());
     const data = await Promise.all(json);
     const batches = data.map((b) => b.items);
@@ -198,5 +228,7 @@ export {
   rankRecommendations, 
   getRankedRecommendations,
   getRecommendationsFromMultiple,
-  getRecommendationsRateLimited
+  getRecommendationsRateLimited,
+  atSpotify,
+  spotifyGetLiked
 }

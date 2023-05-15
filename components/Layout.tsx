@@ -5,13 +5,11 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const handleScroll = (e: any) => {
-    console.log("hello")
-  }
+
 
   return (
     <div className="h-screen max-h-full h-[100vh] bg-black flex flex-col">
-      <div className="flex w-full p-2 gap-2 overflow-hidden">
+      <div className="flex w-full min-h-full p-2 gap-2 overflow-hidden">
 
         <Sidebar/> 
         <div className="
@@ -19,7 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
           rounded-lg
           overflow-hidden
           w-full
-        " onScroll={handleScroll}>
+        ">
           {children}
         </div>
       </div>

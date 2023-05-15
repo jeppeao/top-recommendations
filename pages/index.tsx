@@ -4,18 +4,19 @@ import { authOptions } from "./api/auth/[...nextauth]"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { currentTracks } from "@/recoilAtoms/currentTracksAtom"
 import { likedTracks } from "@/recoilAtoms/likedAtom"
-import useSavedTracks from "@/hooks/useSavedTracks"
 import { useEffect } from "react"
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom"
+import useSavedTracks from "@/hooks/useSavedTracks"
+
 
 export default function Home() {
   const tracks = useRecoilValue(currentTracks);
   const [liked, setLiked] = useRecoilState(likedTracks);
-  const { data } = useSavedTracks() || '';
+  const data = useSavedTracks();
   const recommended = useRecoilValue(recommendedTracks);
-  
+
   useEffect(() => {
-    setLiked(data);
+    setLiked(data as any);
   }, [data])
 
   if (recommended.length > 0) {

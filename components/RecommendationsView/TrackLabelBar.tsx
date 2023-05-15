@@ -9,15 +9,12 @@ interface TrackLabelBarProps {
 const TrackLabelBar = ({sticky}: TrackLabelBarProps) => {
 
   return (
-    <>
     <div className={`
-      ${sticky ? 'sticky' : 'static'}
-      ${sticky ? 'top-0' : ''}
-
-
+      sticky
+      top-0
     `}>
       <div className={`
-        ${sticky ? 'h-28' : 'h-32'}
+        ${sticky ? 'h-20' : 'h-32'}
         w-full
 
         bg-gradient-to-b
@@ -84,7 +81,6 @@ const TrackLabelBar = ({sticky}: TrackLabelBarProps) => {
       </div>
       <hr className="h-px bg-stone-800 border-0"/>
     </div>
-    </>
   )
 }
 

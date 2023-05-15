@@ -1,24 +1,17 @@
-import fetcher from "@/libs/fetcher";
-import useSWRImmutable from 'swr';
+import { getSavedTracks } from "@/libs/spotify";
+import { useEffect, useState } from "react"
 
 const useSavedTracks = () => {
-  const url = '/api/spotify/getSavedTracks';
-  let { data, error, isLoading, mutate } = useSWRImmutable(url, fetcher);
-  
-  return {
-    data,
-    error,
-    isLoading,
-    mutate
-  }
+  const [tracks, setTracks] = useState<{}[]>([]);
+
+  useEffect(() => {
+    const getLiked = async () => {
+      const liked = await getSavedTracks();
+      setTracks(liked);
+    }  
+    getLiked();  
+  }, [])
+  return tracks;
 }
 
-export default useSavedTracks;
-
-
-
-
-
-
-
-
+export default useSavedTracks

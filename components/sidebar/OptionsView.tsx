@@ -1,7 +1,7 @@
-import { getRecommendationsFromMultiple, getRankedRecommendations, rankRecommendations, getRecommendationsRateLimited } from "@/libs/spotify";
+import { rankRecommendations, getRecommendationsRateLimited, atSpotify, spotifyGetLiked } from "@/libs/spotify";
 import { likedTracks } from "@/recoilAtoms/likedAtom";
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 const OptionsView = () => {
@@ -17,30 +17,37 @@ const OptionsView = () => {
     setIsLoading(false);
   }
 
+  const onClick = async () => {
+    const opt = {limit: "2"}
+    let test = await spotifyGetLiked(opt);
+    
+
+    console.log(test)
+  }
+
   return (
     <div className="flex flex-col justify-start items-center h-full w-full mt-2">
       <button 
         className="
-          bg-gradient-to-b 
-          from-violet-900 
-          to-indigo-900
-          text-neutral-100
+          border-neutral-600
+          border-2
+          text-violet-400
           text-xl
           w-4/5
           p-2
           my-2
           rounded-full
-          hover:shadow-neutral-600
-          hover:shadow-md
-          hover:-translate-y-1
-          active:shadow-none
-          active:translate-y-0
+          hover:border-neutral-500
+          hover:text-violet-300
           "
         onClick={onGetRecommendations}
       >
-        {isLoading ? "Loading..." : "Load suggestions"}
+        {isLoading ? "Loading..." : "Load Suggestions"}
       </button>
      
+      <button onClick={onClick}>
+        test
+      </button>
 
     </div>
   );
