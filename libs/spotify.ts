@@ -37,7 +37,7 @@ const atSpotify = async (
   options: {[key:string]: string},
   method: string = "GET", 
 ) => {
-  const path = '/api/spotify/spotify';
+  const path = '/api/spotify';
   const queryParameters = "?" + new URLSearchParams(options).toString();
   
   const fetchParameters = {
@@ -55,16 +55,15 @@ const spotifyGetLiked = async (options: {[key:string]: string} = {}) => {
   return atSpotify(ENDPOINTS.savedTracks, options);
 }
 
-const spotifyGetRecommended = async (options: {[key:string]: string}) => {
-  return atSpotify(ENDPOINTS.recommendations, options);
+const spotifyGetRecommended = async (id: string, options: {[key:string]: string} = {}) => {
+  const combinedOptions = {...options, seed_tracks: id};
+  return atSpotify(ENDPOINTS.recommendations, combinedOptions);
 }
 
-const getResponse = async (url: string, token: string) => {
-  const response = await fetch(url, {
-    headers: { Authorization: `Bearer ${token}`}
-  });
-  return response;
-} 
+const getRankedRecommendations = async (tracks: any, exclude: any) => {
+  const recommendations = await getRecommendationsRateLimited(tracks);
+  return rankRecommendations(recommendations, exclude);
+}
 
 const getSavedTracks = async () => {
   let tracks: {}[] = [];
@@ -77,7 +76,6 @@ const getSavedTracks = async () => {
   // Because of api limit of 50 songs per request 
   // first fetch is used to read total number of songs
   // then urls for fetching all saved songs are prepared
-
   try {
     const res = await spotifyGetLiked({limit: limit.toString(), offset: offset.toString()});
     const firstData = await res.json();
@@ -93,7 +91,7 @@ const getSavedTracks = async () => {
     console.error(error);
   }
 
-  // Now fetch all songs not in first batch
+  // Fetch all songs not in first batch
   try {
     const responses = await Promise.all(offsets.map((off) => spotifyGetLiked(
       { limit: limit.toString(), offset: off.toString() }
@@ -113,27 +111,6 @@ const getSavedTracks = async () => {
   }
 
   return tracks;
-}
-
-const getRecommendations = async (
-  token: string,
-  trackId: string
-) => {
-  const endpoint = "https://api.spotify.com/v1/recommendations"
-  const url = [
-    `${endpoint}`,
-    `?seed_tracks=${trackId}`,
-    `&limit=100`
-  ].join("");
-
-  try {
-    const res = await getResponse(url, token);
-    const data = await res.json(); 
-    return data.tracks;
-
-  } catch (error) {
-    console.error(error);
-  }
 }
 
 const rankRecommendations = (
@@ -161,30 +138,17 @@ const rankRecommendations = (
   return rankedRecommendations.slice(0, maxLength);
 }
 
-const getRankedRecommendations = async (
-  tracks: any,
-  exclude: any,
-) => {
-  const url = `/api/spotify/getRecommendations?trackId=${tracks[0].track.id}`;
-  const recommendations = await fetch(url)
-    .then((res) => res.json());
-  const ranked = rankRecommendations(recommendations, exclude);
+const getRecommendations = async (tracks: any) => {
+  const options = tracks.map((item: any) => {return {trackId: item.track.id}});
+  const responses = await Promise.all(tracks.map(
+    (item: any) => spotifyGetRecommended(item.track.id))
+  );
 
-  return ranked;
-}
-
-const getRecommendationsFromMultiple = async (
-  tracks: any,
-  exclude: any,
-) => {
-  const path = "/api/spotify/getRecommendations?trackId=";
-  const ids = tracks.map((track: any) => track.track.id);
-  const urls = ids.map((id:string) => path+id);
-  const responses = await Promise.all(urls.map((url:string) => fetch(url)));
   const batches = responses.map((res) => res.json());
-  const data = (await Promise.all(batches)).flat();
+  const data = (await Promise.all(batches));
+  const recommendations = data.map((item: any) => item.tracks).flat();
   
-  return data;
+  return recommendations;
 }
 
 const delayedPromise = (delay: number, fn: any) => {
@@ -197,7 +161,6 @@ const delayedPromise = (delay: number, fn: any) => {
 
 const getRecommendationsRateLimited = async (
   tracks: any,
-  exclude: any,
   callsPerSecond = 50
 ) => {
   let offset = 0;
@@ -210,13 +173,14 @@ const getRecommendationsRateLimited = async (
      let batch = tracks.slice(offset, offset+batchSize);
      const delayed = delayedPromise(
        delay,
-       () => getRecommendationsFromMultiple(batch, tracks)
+       () => getRecommendations(batch)
      );
      batches.push(delayed);
      offset += batchSize;
      delay += 1000;
    }
   const responses = await Promise.all(batches);
+
   return responses.flat();
 }
 
@@ -224,11 +188,5 @@ export default spotifyApi;
 export { 
   LOGIN_URL, 
   getSavedTracks, 
-  getRecommendations, 
-  rankRecommendations, 
-  getRankedRecommendations,
-  getRecommendationsFromMultiple,
-  getRecommendationsRateLimited,
-  atSpotify,
-  spotifyGetLiked
+  getRankedRecommendations
 }

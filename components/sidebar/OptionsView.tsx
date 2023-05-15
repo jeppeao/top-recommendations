@@ -1,4 +1,4 @@
-import { rankRecommendations, getRecommendationsRateLimited, atSpotify, spotifyGetLiked } from "@/libs/spotify";
+import { getRankedRecommendations } from "@/libs/spotify";
 import { likedTracks } from "@/recoilAtoms/likedAtom";
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom";
 import { useState } from "react";
@@ -11,18 +11,9 @@ const OptionsView = () => {
 
   const onGetRecommendations = async () => {
     setIsLoading(true);
-    const recs = await getRecommendationsRateLimited(tracks.slice(0,5), tracks);
-    const ranked = rankRecommendations(recs, tracks);
+    const ranked = await getRankedRecommendations(tracks.slice(0,5), tracks);
     setRecommended(ranked as any);
     setIsLoading(false);
-  }
-
-  const onClick = async () => {
-    const opt = {limit: "2"}
-    let test = await spotifyGetLiked(opt);
-    
-
-    console.log(test)
   }
 
   return (
@@ -44,11 +35,6 @@ const OptionsView = () => {
       >
         {isLoading ? "Loading..." : "Load Suggestions"}
       </button>
-     
-      <button onClick={onClick}>
-        test
-      </button>
-
     </div>
   );
 }
