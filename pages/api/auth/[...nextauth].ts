@@ -1,19 +1,34 @@
 import SpotifyProvider from "next-auth/providers/spotify";
 import { LOGIN_URL } from "../../../libs/spotify";
-import spotifyApi from "../../../libs/spotify";
 import NextAuth from "next-auth/next";
+import { ENDPOINTS } from "../../../libs/spotify";
 
-async function refreshAccessToken(token: any) {
+export async function refreshAccessToken(token: any) {
   try {
-    spotifyApi.setAccessToken(token.accessToken);
-    spotifyApi.setRefreshToken(token.refreshToken);
+    const body = `grant_type=refresh_token&refresh_token=${token.refreshToken}`;
 
-    const { body: refreshedToken } = await spotifyApi.refreshAccessToken();
+    const authBase64String = Buffer.from(
+      process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID + ':' + 
+      process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
+      'utf-8'
+    ).toString('base64')
+
+    const response = await fetch(ENDPOINTS.refresh, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + authBase64String,
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: body
+    });
+
+    const {access_token, expires_in} = await response.json();
+
     return {
       ...token,
-      accessToken: refreshedToken.access_token,
-      accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
-      refreshToken: refreshedToken.refresh_token ?? token.refreshToken
+      accessToken: access_token,
+      accessTokenExpires: Date.now() + expires_in * 1000,
+      refreshToken: token.refreshToken
     }
 
   } catch (error) {
@@ -25,6 +40,7 @@ async function refreshAccessToken(token: any) {
     }
   }
 }
+
 export const authOptions = {
   providers: [
     SpotifyProvider({
@@ -39,6 +55,7 @@ export const authOptions = {
   },
   callbacks: {
     async jwt({ token, account, user}: any) {
+
       // initial sign in
       if (account && user) {
         return {
@@ -52,6 +69,7 @@ export const authOptions = {
       }
       // Return previous token if the access token has not expired
       if (Date.now() < token.accessTokenExpires) {
+
         return token;
       }
 

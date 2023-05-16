@@ -11,7 +11,9 @@ interface CountedRecommendations {
 
 const ENDPOINTS = {
   savedTracks: "https://api.spotify.com/v1/me/tracks",
-  recommendations: "https://api.spotify.com/v1/recommendations"
+  recommendations: "https://api.spotify.com/v1/recommendations",
+  refresh: "https://accounts.spotify.com/api/token",
+  authorize: "https://accounts.spotify.com/authorize?"
 }
 
 const scopes = [
@@ -24,14 +26,9 @@ const scopes = [
 const queryParamString = new URLSearchParams({scope: scopes});
 
 const LOGIN_URL =
-  "https://accounts.spotify.com/authorize?" +
+  ENDPOINTS.authorize + "?" +
    queryParamString.toString();
    
-const spotifyApi = new SpotifyWebApi({
-  clientId: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID,
-  clientSecret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
-});
-
 const atSpotify = async (
   endpoint: string,
   options: {[key:string]: string},
@@ -79,6 +76,7 @@ const getSavedTracks = async () => {
   try {
     const res = await spotifyGetLiked({limit: limit.toString(), offset: offset.toString()});
     const firstData = await res.json();
+    console.log(firstData)
     offset += 50;
     tracks = tracks.concat(firstData.items);
     total = firstData.total;
@@ -184,9 +182,9 @@ const getRecommendationsRateLimited = async (
   return responses.flat();
 }
 
-export default spotifyApi;
 export { 
   LOGIN_URL, 
+  ENDPOINTS,
   getSavedTracks, 
   getRankedRecommendations
 }
