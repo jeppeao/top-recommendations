@@ -76,7 +76,6 @@ const getSavedTracks = async () => {
   try {
     const res = await spotifyGetLiked({limit: limit.toString(), offset: offset.toString()});
     const firstData = await res.json();
-    console.log(firstData)
     offset += 50;
     tracks = tracks.concat(firstData.items);
     total = firstData.total;
