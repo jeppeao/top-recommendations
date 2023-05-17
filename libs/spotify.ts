@@ -9,18 +9,27 @@ interface CountedRecommendations {
   [key: string] : CountedRecommendation;
 }
 
+interface FetchParameters {
+  headers: {[key: string]: string},
+  method: string,
+  body?: string
+}
+
+
 const ENDPOINTS = {
   savedTracks: "https://api.spotify.com/v1/me/tracks",
   recommendations: "https://api.spotify.com/v1/recommendations",
   refresh: "https://accounts.spotify.com/api/token",
-  authorize: "https://accounts.spotify.com/authorize?"
+  authorize: "https://accounts.spotify.com/authorize?",
+  play: "https://api.spotify.com/v1/me/player/play"
 }
 
 const scopes = [
   "playlist-read-private",
   "streaming",
   "user-library-read",
-  "user-read-email"
+  "user-read-email",
+  "user-modify-playback-state"
 ].join(',');
 
 const queryParamString = new URLSearchParams({scope: scopes});
@@ -32,20 +41,39 @@ const LOGIN_URL =
 const atSpotify = async (
   endpoint: string,
   options: {[key:string]: string},
-  method: string = "GET", 
+  method: string = "GET",
+  body?: string,
+  headers?: {[key: string]: string},
 ) => {
   const path = '/api/spotify';
-  const queryParameters = "?" + new URLSearchParams(options).toString();
+  let queryParameters = "?" + new URLSearchParams(options).toString();
+  queryParameters = queryParameters === "?" ? "" : queryParameters;
   
-  const fetchParameters = {
+  const fetchParameters: FetchParameters = {
     headers: {
       "spotify-endpoint": `${endpoint}`
     },
-    method: method
+    method: method,
   } 
+
+  if (body) {
+    fetchParameters.body = body;
+  }
+
+  if (headers) {
+    for (const [key, value] of Object.entries(headers)) {
+      fetchParameters.headers.key = value;
+    }
+  }
 
   const response = await fetch(path + queryParameters, fetchParameters);
   return response;
+}
+
+const spotifyPlayTrack = async (songId: string) => {
+  const headers = {"Content-Type": "application/json"};
+  const body =`{"uris":[spotify:track:${songId}]}`
+  return atSpotify(ENDPOINTS.play, {}, "PUT", body, headers);
 }
 
 const spotifyGetLiked = async (options: {[key:string]: string} = {}) => {
@@ -185,5 +213,6 @@ export {
   LOGIN_URL, 
   ENDPOINTS,
   getSavedTracks, 
-  getRankedRecommendations
+  getRankedRecommendations,
+  spotifyPlayTrack,
 }

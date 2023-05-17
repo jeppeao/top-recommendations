@@ -7,10 +7,10 @@ import { likedTracks } from "@/recoilAtoms/likedAtom"
 import { useEffect } from "react"
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom"
 import useSavedTracks from "@/hooks/useSavedTracks"
+import { spotifyPlayTrack } from "@/libs/spotify";
 
 
 export default function Home() {
-  const tracks = useRecoilValue(currentTracks);
   const [liked, setLiked] = useRecoilState(likedTracks);
   const data = useSavedTracks();
   const recommended = useRecoilValue(recommendedTracks);
@@ -20,6 +20,8 @@ export default function Home() {
   }, [data])
 
   if (recommended.length > 0) {
+    // const test = spotifyPlayTrack((recommended[0]as any).recommendation.id)
+  
     return (
       <RecommendationsView tracks={recommended} />
     )

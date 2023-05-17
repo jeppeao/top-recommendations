@@ -22,8 +22,13 @@ export default async function handler(
 
   try {
     const response = await fetch(url, fetchParameters);
-    const json = await response.json();
-    return res.status(200).json(json);
+    
+    if (method === 'GET') {
+      const json = await response.json();
+      return res.status(200).json(json);
+    }
+    
+    return res.status(204).end();
 
   } catch (error) {
     console.log(error);
