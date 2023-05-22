@@ -11,6 +11,7 @@ const useSavedTracks = () => {
     }  
     getLiked();  
   }, [])
+
   return tracks;
 }
 

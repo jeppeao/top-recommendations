@@ -1,3 +1,4 @@
+import { spotifyPlayTrack } from "@/libs/spotify";
 import { msToMinutesAndSeconds } from "@/libs/utils";
 import { useState } from "react";
 import { BsPlayFill } from "react-icons/bs";
@@ -46,6 +47,10 @@ const TrackCard = ({ track, order, hits }: TrackCardProps) => {
           
           <span className="group-hover:hidden"> {order + 1} </span>
           <button
+            onClick={ () => {
+                spotifyPlayTrack(track.id);
+              }
+            }
             className="hidden group-hover:block -mr-1"
           > {<BsPlayFill size={20} color={"lightgreen"}/>}</button>
         </div>

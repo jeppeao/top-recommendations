@@ -1,5 +1,3 @@
-import SpotifyWebApi from "spotify-web-api-node"
-
 interface CountedRecommendation {
   recommendation: any;
   count: number
@@ -20,8 +18,9 @@ const ENDPOINTS = {
   savedTracks: "https://api.spotify.com/v1/me/tracks",
   recommendations: "https://api.spotify.com/v1/recommendations",
   refresh: "https://accounts.spotify.com/api/token",
-  authorize: "https://accounts.spotify.com/authorize?",
-  play: "https://api.spotify.com/v1/me/player/play"
+  authorize: "https://accounts.spotify.com/authorize",
+  play: "https://api.spotify.com/v1/me/player/play",
+  devices: "https://api.spotify.com/v1/me/player/devices"
 }
 
 const scopes = [
@@ -29,7 +28,10 @@ const scopes = [
   "streaming",
   "user-library-read",
   "user-read-email",
-  "user-modify-playback-state"
+  "user-modify-playback-state",
+  "user-read-playback-state",
+  "playlist-modify-private",
+  "playlist-modify-public"
 ].join(',');
 
 const queryParamString = new URLSearchParams({scope: scopes});
@@ -38,7 +40,7 @@ const LOGIN_URL =
   ENDPOINTS.authorize + "?" +
    queryParamString.toString();
    
-const atSpotify = async (
+const spotifyGet = async (
   endpoint: string,
   options: {[key:string]: string},
   method: string = "GET",
@@ -70,19 +72,57 @@ const atSpotify = async (
   return response;
 }
 
+const spotifyPut = async (
+  endpoint: string,
+  options: {[key:string]: string},
+  body?: string,
+  headers?: {[key: string]: string},
+) => {
+  const path = '/api/spotify/play';
+  let queryParameters = "?" + new URLSearchParams(options).toString();
+  queryParameters = queryParameters === "?" ? "" : queryParameters;
+  
+  const fetchParameters: FetchParameters = {
+    headers: {
+      "spotify-endpoint": `${endpoint}`
+    },
+    method: "PUT",
+  } 
+
+  if (body) {
+    fetchParameters.body = body;
+  }
+
+  if (headers) {
+    for (const [key, value] of Object.entries(headers)) {
+      fetchParameters.headers.key = value;
+    }
+  }
+
+  const response = await fetch(path + queryParameters, fetchParameters);
+  return response;
+}
+
+const spotifyGetDevices = async () => {
+  return spotifyGet(ENDPOINTS.devices, {});
+}
+
 const spotifyPlayTrack = async (songId: string) => {
   const headers = {"Content-Type": "application/json"};
-  const body =`{"uris":[spotify:track:${songId}]}`
-  return atSpotify(ENDPOINTS.play, {}, "PUT", body, headers);
+  const body =songId
+  const devices = await spotifyGetDevices();
+  const json = await devices.json()
+  const options = { device_id: json.devices[0].id }
+  return spotifyPut(ENDPOINTS.play, options, body, headers);
 }
 
 const spotifyGetLiked = async (options: {[key:string]: string} = {}) => {
-  return atSpotify(ENDPOINTS.savedTracks, options);
+  return spotifyGet(ENDPOINTS.savedTracks, options);
 }
 
 const spotifyGetRecommended = async (id: string, options: {[key:string]: string} = {}) => {
   const combinedOptions = {...options, seed_tracks: id};
-  return atSpotify(ENDPOINTS.recommendations, combinedOptions);
+  return spotifyGet(ENDPOINTS.recommendations, combinedOptions);
 }
 
 const getRankedRecommendations = async (tracks: any, exclude: any) => {

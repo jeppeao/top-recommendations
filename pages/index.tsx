@@ -20,7 +20,6 @@ export default function Home() {
   }, [data])
 
   if (recommended.length > 0) {
-    // const test = spotifyPlayTrack((recommended[0]as any).recommendation.id)
   
     return (
       <RecommendationsView tracks={recommended} />
