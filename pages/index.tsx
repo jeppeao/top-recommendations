@@ -2,12 +2,10 @@ import RecommendationsView from "@/components/RecommendationsView"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./api/auth/[...nextauth]"
 import { useRecoilState, useRecoilValue } from "recoil"
-import { currentTracks } from "@/recoilAtoms/currentTracksAtom"
 import { likedTracks } from "@/recoilAtoms/likedAtom"
 import { useEffect } from "react"
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom"
 import useSavedTracks from "@/hooks/useSavedTracks"
-import { spotifyPlayTrack } from "@/libs/spotify";
 
 
 export default function Home() {

@@ -13,6 +13,9 @@ interface FetchParameters {
   body?: string
 }
 
+export interface UserProfile {
+  product: string
+}
 
 const ENDPOINTS = {
   savedTracks: "https://api.spotify.com/v1/me/tracks",
@@ -20,7 +23,8 @@ const ENDPOINTS = {
   refresh: "https://accounts.spotify.com/api/token",
   authorize: "https://accounts.spotify.com/authorize",
   play: "https://api.spotify.com/v1/me/player/play",
-  devices: "https://api.spotify.com/v1/me/player/devices"
+  devices: "https://api.spotify.com/v1/me/player/devices",
+  userProfile: "https://api.spotify.com/v1/me"
 }
 
 const scopes = [
@@ -28,6 +32,7 @@ const scopes = [
   "streaming",
   "user-library-read",
   "user-read-email",
+  "user-read-private",
   "user-modify-playback-state",
   "user-read-playback-state",
   "playlist-modify-private",
@@ -128,6 +133,10 @@ const spotifyGetRecommended = async (id: string, options: {[key:string]: string}
 const getRankedRecommendations = async (tracks: any, exclude: any) => {
   const recommendations = await getRecommendationsRateLimited(tracks);
   return rankRecommendations(recommendations, exclude);
+}
+
+const spotifyGetUserProfile = async() => {
+  return spotifyGet(ENDPOINTS.userProfile, {})
 }
 
 const getSavedTracks = async () => {
@@ -255,4 +264,5 @@ export {
   getSavedTracks, 
   getRankedRecommendations,
   spotifyPlayTrack,
+  spotifyGetUserProfile
 }

@@ -8,10 +8,13 @@ interface TrackCardProps {
   track: any;
   order: number;
   hits: number;
+  userProduct: string | undefined;
 }
 
-const TrackCard = ({ track, order, hits }: TrackCardProps) => {
+const TrackCard = ({ track, order, hits, userProduct }: TrackCardProps) => {
   const [liked, setLiked] = useState(false);
+
+  const isPremium = userProduct === "premium";
 
   const onLike = () => {
     setLiked(true);
@@ -19,6 +22,10 @@ const TrackCard = ({ track, order, hits }: TrackCardProps) => {
 
   const onUnlike = () => {
     setLiked(false)
+  }
+
+  const warningOnClick = () => {
+    alert("Spotify only allows this control with premium accounts")
   }
 
   return (
@@ -46,13 +53,15 @@ const TrackCard = ({ track, order, hits }: TrackCardProps) => {
         ">
           
           <span className="group-hover:hidden"> {order + 1} </span>
+          
           <button
-            onClick={ () => {
-                spotifyPlayTrack(track.id);
-              }
+            onClick={ isPremium 
+              ? () => { spotifyPlayTrack(track.id); }
+              : () => warningOnClick()
             }
-            className="hidden group-hover:block -mr-1"
-          > {<BsPlayFill size={20} color={"lightgreen"}/>}</button>
+              className="hidden group-hover:block -mr-1"
+            > {<BsPlayFill size={20} color={"lightgreen"}/>}
+          </button>
         </div>
         
         <div className="flex items-center">
