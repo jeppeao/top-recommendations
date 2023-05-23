@@ -1,4 +1,4 @@
-import { spotifyPlayTrack } from "@/libs/spotify";
+import { spotifyPlayTrack, spotifySaveTrack, spotifyUnSaveTrack } from "@/libs/spotify";
 import { msToMinutesAndSeconds } from "@/libs/utils";
 import { useState } from "react";
 import { BsPlayFill } from "react-icons/bs";
@@ -17,10 +17,12 @@ const TrackCard = ({ track, order, hits, userProduct }: TrackCardProps) => {
   const isPremium = userProduct === "premium";
 
   const onLike = () => {
+    spotifySaveTrack(track.id);
     setLiked(true);
   }
 
   const onUnlike = () => {
+    spotifyUnSaveTrack(track.id);
     setLiked(false)
   }
 

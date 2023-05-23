@@ -1,8 +1,9 @@
 import { spotifyGetUserProfile } from "@/libs/spotify";
 import { useEffect, useState } from "react"
+import { UserProfile } from "@/libs/spotify";
 
 const useUserProfile = () => {
-  const [tracks, setTracks] = useState<{}>({});
+  const [tracks, setTracks] = useState<UserProfile>();
 
   useEffect(() => {
     const getUser = async () => {

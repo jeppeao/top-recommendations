@@ -6,7 +6,6 @@ const TrackList = (props: any) => {
   const userProfile = useUserProfile();
   const userProduct = userProfile?.product;
 
-  console.log(userProduct)
   return (
     <div className="py-4 px-4">
       {props.tracks && props.tracks.map((item: any, i: number) => {

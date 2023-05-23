@@ -8,18 +8,19 @@ export default async function handler(
 ) {
   const session = await getServerSession(req, res, authOptions);
   const token = session.user.accessToken;
-  const headers = {"Content-Type": "application/json"};
-  const body = `{"uris": ["spotify:track:${req.body}"]}`
-  
+  const body = req.body;
+  const endpoint = req.headers["spotify-endpoint"];
+  console.log(endpoint)
   let queryString = "?" + new URLSearchParams(req.query as {}).toString();
-  const url = ENDPOINTS.play + queryString;
+  queryString = queryString === "?" ? "" : queryString;
+  const url = endpoint + queryString;
 
   const fetchParameters = {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    method: "PUT",
+    method: req.method,
     body: body
   }
 
