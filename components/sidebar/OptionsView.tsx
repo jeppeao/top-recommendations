@@ -1,3 +1,5 @@
+import useGenres from "@/hooks/useGenres";
+import usePlaylists from "@/hooks/usePlaylists";
 import { getRankedRecommendations } from "@/libs/spotify";
 import { likedTracks } from "@/recoilAtoms/likedAtom";
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom";
@@ -8,7 +10,10 @@ const OptionsView = () => {
   const tracks = useRecoilValue(likedTracks);
   const [recommended, setRecommended] = useRecoilState(recommendedTracks);
   const [isLoading, setIsLoading] = useState(false);
+  const playlists = usePlaylists();
+  const genres = useGenres();
 
+  console.log(genres);
   const onGetRecommendations = async () => {
     setIsLoading(true);
     const ranked = await getRankedRecommendations(tracks.slice(0,5), tracks);

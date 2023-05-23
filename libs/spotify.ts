@@ -26,6 +26,8 @@ const ENDPOINTS = {
   devices: "https://api.spotify.com/v1/me/player/devices",
   userProfile: "https://api.spotify.com/v1/me",
   modifyLike: "https://api.spotify.com/v1/me/tracks",
+  getPlaylists: "https://api.spotify.com/v1/me/playlists",
+  getGenres: "https://api.spotify.com/v1/recommendations/available-genre-seeds"
 }
 
 const scopes = [
@@ -38,7 +40,7 @@ const scopes = [
   "user-modify-playback-state",
   "user-read-playback-state",
   "user-library-read",
-  "user-library-modify"
+  "user-library-modify",
 ].join(',');
 
 const queryParamString = new URLSearchParams({scope: scopes});
@@ -139,17 +141,26 @@ const getRankedRecommendations = async (tracks: any, exclude: any) => {
 }
 
 const spotifyGetUserProfile = async() => {
-  return spotifyGet(ENDPOINTS.userProfile, {})
+  return spotifyGet(ENDPOINTS.userProfile, {});
 }
 
 const spotifySaveTrack = async (songId: string) => {
   const body = `{"ids": ["${songId}"]}`;
-  return spotifyModify(ENDPOINTS.modifyLike, "PUT", {}, body)
+  return spotifyModify(ENDPOINTS.modifyLike, "PUT", {}, body);
 }
 
 const spotifyUnSaveTrack = async (songId: string) => {
   const endpoint = ENDPOINTS.modifyLike + `?ids=${songId}`
-  return spotifyModify(endpoint, "DELETE", {})
+  return spotifyModify(endpoint, "DELETE", {});
+}
+
+const spotifyGetPlaylists = async () => {
+  return spotifyGet(ENDPOINTS.getPlaylists, {});
+}
+
+const spotifyGetGenres = async () => {
+  return spotifyGet(ENDPOINTS.getGenres, {});
+
 }
 
 const getSavedTracks = async () => {
@@ -279,5 +290,7 @@ export {
   spotifyPlayTrack,
   spotifyGetUserProfile,
   spotifySaveTrack,
-  spotifyUnSaveTrack
+  spotifyUnSaveTrack,
+  spotifyGetPlaylists,
+  spotifyGetGenres
 }

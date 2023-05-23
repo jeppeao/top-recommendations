@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
-import { ENDPOINTS } from "@/libs/spotify";
 
 export default async function handler(
   req: NextApiRequest, res: NextApiResponse
@@ -10,7 +9,6 @@ export default async function handler(
   const token = session.user.accessToken;
   const body = req.body;
   const endpoint = req.headers["spotify-endpoint"];
-  console.log(endpoint)
   let queryString = "?" + new URLSearchParams(req.query as {}).toString();
   queryString = queryString === "?" ? "" : queryString;
   const url = endpoint + queryString;
