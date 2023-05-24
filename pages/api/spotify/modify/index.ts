@@ -24,6 +24,12 @@ export default async function handler(
 
   try {
     const response = await fetch(url, fetchParameters);
+
+    if (req.method === "POST") {
+      const json = await response.json();
+      return res.status(200).json(json);
+    }
+    
     return res.status(200).end();
 
   } catch (error) {

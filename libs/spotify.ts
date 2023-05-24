@@ -14,6 +14,7 @@ interface FetchParameters {
 }
 
 export interface UserProfile {
+  id: string,
   product: string
 }
 
@@ -160,7 +161,30 @@ const spotifyGetPlaylists = async () => {
 
 const spotifyGetGenres = async () => {
   return spotifyGet(ENDPOINTS.getGenres, {});
+}
 
+const spotifyCreatePlaylist = async (userId: string) => {
+  const timeString = new Date(Date.now()).toLocaleString();
+  const name = "Recommendations " + timeString;
+  const endpoint = `https://api.spotify.com/v1/users/${userId}/playlists`;
+  const body = `{"name": "${name}"}`;
+  return spotifyModify(endpoint, "POST", {}, body);
+}
+
+const spotifyAddToPlaylist = async (playlistId: string, tracks: any) => {
+  const dataArray = tracks.map((track: any) => {
+    return `"spotify:track:${track.recommendation.id}"`;
+  });
+  const body = `{"uris" : [${dataArray.toString()}]}`;
+  const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
+  return spotifyModify(endpoint, "POST", {}, body);
+}
+
+const spotifyPlaylistFromTracks = async (userId: string, tracks: any) => {
+  const playlist = await spotifyCreatePlaylist(userId)
+    .then(res => res.json());
+  const id = playlist.id;
+  const responst = spotifyAddToPlaylist(id, tracks);
 }
 
 const getSavedTracks = async () => {
@@ -282,6 +306,9 @@ const getRecommendationsRateLimited = async (
   return responses.flat();
 }
 
+const getTimeString = () => {
+}
+
 export { 
   LOGIN_URL, 
   ENDPOINTS,
@@ -292,5 +319,7 @@ export {
   spotifySaveTrack,
   spotifyUnSaveTrack,
   spotifyGetPlaylists,
-  spotifyGetGenres
+  spotifyGetGenres,
+  spotifyCreatePlaylist,
+  spotifyPlaylistFromTracks
 }

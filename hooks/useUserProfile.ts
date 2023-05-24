@@ -3,18 +3,18 @@ import { useEffect, useState } from "react"
 import { UserProfile } from "@/libs/spotify";
 
 const useUserProfile = () => {
-  const [tracks, setTracks] = useState<UserProfile>();
+  const [profile, setProfile] = useState<UserProfile>();
 
   useEffect(() => {
     const getUser = async () => {
       const response = await spotifyGetUserProfile();
       const json = await response.json();
-      setTracks(json);
+      setProfile(json);
     }  
     getUser();  
   }, [])
 
-  return tracks;
+  return profile;
 }
 
 export default useUserProfile

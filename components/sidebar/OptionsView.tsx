@@ -1,6 +1,7 @@
 import useGenres from "@/hooks/useGenres";
 import usePlaylists from "@/hooks/usePlaylists";
-import { getRankedRecommendations } from "@/libs/spotify";
+import useUserProfile from "@/hooks/useUserProfile";
+import { getRankedRecommendations, spotifyCreatePlaylist, spotifyPlaylistFromTracks } from "@/libs/spotify";
 import { likedTracks } from "@/recoilAtoms/likedAtom";
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom";
 import { useState } from "react";
@@ -12,13 +13,20 @@ const OptionsView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const playlists = usePlaylists();
   const genres = useGenres();
+  const profile = useUserProfile();
 
-  console.log(genres);
+
   const onGetRecommendations = async () => {
     setIsLoading(true);
     const ranked = await getRankedRecommendations(tracks.slice(0,5), tracks);
     setRecommended(ranked as any);
     setIsLoading(false);
+  }
+
+  const onTest = async () => {
+    if (profile) {
+      const p = await spotifyPlaylistFromTracks(profile.id, recommended);
+    }
   }
 
   return (
@@ -39,6 +47,9 @@ const OptionsView = () => {
         onClick={onGetRecommendations}
       >
         {isLoading ? "Loading..." : "Load Suggestions"}
+      </button>
+      <button onClick={onTest}>
+        create playlist
       </button>
     </div>
   );
