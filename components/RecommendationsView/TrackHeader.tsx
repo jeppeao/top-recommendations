@@ -1,8 +1,11 @@
 import { BsFillLightbulbFill }from 'react-icons/bs'
 import UserInfo from './UserInfo';
+import { useRecoilValue } from 'recoil';
+import { likedTracks } from '@/recoilAtoms/likedAtom';
 
-const TrackHeader = () => {
-
+const TrackHeader = ({tracks}: any) => {
+  const liked = useRecoilValue(likedTracks);
+  
   return (
     <div 
       className="
@@ -15,6 +18,8 @@ const TrackHeader = () => {
         flex
         flex-col
         pb-4
+        pt-2
+        pr-4
     ">
       <div className="h-28 flex justify-end">
         <UserInfo />
@@ -51,9 +56,9 @@ const TrackHeader = () => {
           lg:gap-0
           lg:justify-between
         ">
-          <p className="text-sm font-bold text-neutral-200"></p>
+          <p className="text-sm font-bold text-neutral-200">from playlist Liked Songs ({liked.length} songs)</p>
           <h1 className="text-4xl md:text-5xl lg:text-8xl font-bold text-neutral-200">Suggestions</h1>
-          <p className="text-sm font-bold text-neutral-200">From playlist Liked Songs</p>
+          <p className="text-sm font-bold text-neutral-200"> {tracks.length} recommendations</p>
         </div>
       </div>
     </div>

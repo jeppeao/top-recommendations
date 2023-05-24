@@ -18,15 +18,9 @@ const OptionsView = () => {
 
   const onGetRecommendations = async () => {
     setIsLoading(true);
-    const ranked = await getRankedRecommendations(tracks.slice(0,5), tracks);
+    const ranked = await getRankedRecommendations(tracks.slice(0,10), tracks);
     setRecommended(ranked as any);
     setIsLoading(false);
-  }
-
-  const onTest = async () => {
-    if (profile) {
-      const p = await spotifyPlaylistFromTracks(profile.id, recommended);
-    }
   }
 
   return (
@@ -47,9 +41,6 @@ const OptionsView = () => {
         onClick={onGetRecommendations}
       >
         {isLoading ? "Loading..." : "Load Suggestions"}
-      </button>
-      <button onClick={onTest}>
-        create playlist
       </button>
     </div>
   );

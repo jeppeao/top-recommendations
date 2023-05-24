@@ -171,11 +171,15 @@ const spotifyCreatePlaylist = async (userId: string) => {
   return spotifyModify(endpoint, "POST", {}, body);
 }
 
-const spotifyAddToPlaylist = async (playlistId: string, tracks: any) => {
+const spotifyAddToPlaylist = async (
+  playlistId: string, 
+  tracks: any,
+  position: number
+) => {
   const dataArray = tracks.map((track: any) => {
     return `"spotify:track:${track.recommendation.id}"`;
   });
-  const body = `{"uris" : [${dataArray.toString()}]}`;
+  const body = `{"uris" : [${dataArray.toString()}], "position": ${position}}`;
   const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
   return spotifyModify(endpoint, "POST", {}, body);
 }
@@ -184,7 +188,11 @@ const spotifyPlaylistFromTracks = async (userId: string, tracks: any) => {
   const playlist = await spotifyCreatePlaylist(userId)
     .then(res => res.json());
   const id = playlist.id;
-  const responst = spotifyAddToPlaylist(id, tracks);
+  const response = await spotifyAddToPlaylist(id, tracks.slice(0,99), 0);
+  const secondBatch = tracks.slice(99);
+  if (secondBatch.length > 0) {
+    const secondResponse = await spotifyAddToPlaylist(id, secondBatch, 99);
+  }
 }
 
 const getSavedTracks = async () => {

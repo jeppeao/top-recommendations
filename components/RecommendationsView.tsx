@@ -28,8 +28,11 @@ const RecommendationsView = (props: any) => {
       style={{minWidth: '500px'}}
       onScroll={handleScroll}
     >
-      <TrackHeader />
-      <TrackLabelBar sticky={scrolledPastHeader} />
+      <TrackHeader tracks={props.tracks}/>
+      <TrackLabelBar 
+        sticky={scrolledPastHeader} 
+        tracks={props.tracks}
+      />
       <TrackList tracks={props.tracks}/>
     </div>
   )
