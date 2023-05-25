@@ -6,6 +6,7 @@ import { likedTracks } from "@/recoilAtoms/likedAtom";
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import DualRangeSlider from "../DualRangeSlider";
 
 const OptionsView = () => {
   const tracks = useRecoilValue(likedTracks);
@@ -24,7 +25,7 @@ const OptionsView = () => {
   }
 
   return (
-    <div className="flex flex-col justify-start items-center h-full w-full mt-2">
+    <div className="flex flex-col gap-4 justify-start items-center h-full w-full mt-2">
       <button 
         className="
           border-neutral-600
@@ -42,6 +43,13 @@ const OptionsView = () => {
       >
         {isLoading ? "Loading..." : "Load Suggestions"}
       </button>
+      <DualRangeSlider 
+        min={0} 
+        max={100} 
+        labels={{min:"Cold", max:"Hot", label:"Popularity range"}}
+        onChange={(min: number, max: number) => console.log(min, max)}
+      
+      />
     </div>
   );
 }

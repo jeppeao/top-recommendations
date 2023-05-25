@@ -31,6 +31,12 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-300: #d4d4d4;
+  --color-violet-400: #a78bfa;
+  --color-violet-800: #5b21b6;
 }
 
 @media (prefers-color-scheme: dark) {

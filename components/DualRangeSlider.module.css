@@ -1,0 +1,44 @@
+.thumb {
+  pointer-events: none;
+  position: absolute;
+  height: 0;
+  width: 100px;
+  outline: none;
+  top: 2px;
+}
+
+.thumb::-moz-range-thumb,
+.thumb::-webkit-slider-thumb {
+  background-color: var(--color-neutral-400);
+  pointer-events: all;
+  cursor: pointer;
+  top: 4;
+  height: 16px;
+  width: 16px;
+  border: none;
+  border-radius: 50%;
+}
+
+.slider {
+  position: relative;
+  width: 200px;
+}
+
+.sliderTrack,
+.sliderRange {
+  border-radius: 3px;
+  height: 5px;
+  position: absolute;
+}
+
+.sliderTrack {
+  background-color: var(--color-neutral-600);
+  width: 100%;
+  z-index: 1;
+}
+
+.sliderRange {
+  background-color: var(--color-violet-400);
+  box-shadow: 0px 0px 3px var(--color-violet-400);
+  z-index: 2;
+}
