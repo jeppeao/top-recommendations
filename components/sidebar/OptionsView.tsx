@@ -4,7 +4,7 @@ import useUserProfile from "@/hooks/useUserProfile";
 import { getRankedRecommendations, spotifyCreatePlaylist, spotifyPlaylistFromTracks } from "@/libs/spotify";
 import { likedTracks } from "@/recoilAtoms/likedAtom";
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import DualRangeSlider from "../DualRangeSlider";
 
@@ -12,14 +12,34 @@ const OptionsView = () => {
   const tracks = useRecoilValue(likedTracks);
   const [recommended, setRecommended] = useRecoilState(recommendedTracks);
   const [isLoading, setIsLoading] = useState(false);
+  const [minPopularity, setMinPopularity] = useState(0);
+  const [maxPopularity, setMaxPopularity] = useState(100);
+
   const playlists = usePlaylists();
   const genres = useGenres();
   const profile = useUserProfile();
 
+  const recommendationsOptions = {
+    "max_popularity": `${maxPopularity}`,
+    "min_popularity": `${minPopularity}`
+  }
+
+  const onPopularitySliderChange = (min: number, max: number) => {
+    if (min !== minPopularity) {
+      setMinPopularity(min);
+    }
+    if (max !== maxPopularity) {
+      setMaxPopularity(max);
+    }
+  }
 
   const onGetRecommendations = async () => {
     setIsLoading(true);
-    const ranked = await getRankedRecommendations(tracks.slice(0,10), tracks);
+    const ranked = await getRankedRecommendations(
+      tracks.slice(0,10), 
+      tracks, 
+      recommendationsOptions
+    );
     setRecommended(ranked as any);
     setIsLoading(false);
   }
@@ -47,7 +67,7 @@ const OptionsView = () => {
         min={0} 
         max={100} 
         labels={{min:"Cold", max:"Hot", label:"Popularity range"}}
-        onChange={(min: number, max: number) => console.log(min, max)}
+        onChange={onPopularitySliderChange}
       
       />
     </div>

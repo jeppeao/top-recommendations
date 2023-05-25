@@ -136,8 +136,12 @@ const spotifyGetRecommended = async (id: string, options: {[key:string]: string}
   return spotifyGet(ENDPOINTS.recommendations, combinedOptions);
 }
 
-const getRankedRecommendations = async (tracks: any, exclude: any) => {
-  const recommendations = await getRecommendationsRateLimited(tracks);
+const getRankedRecommendations = async (
+  tracks: any, 
+  exclude: any, 
+  options: {[key:string]: string} = {}
+) => {
+  const recommendations = await getRecommendationsRateLimited(tracks, options);
   return rankRecommendations(recommendations, exclude);
 }
 
@@ -268,10 +272,9 @@ const rankRecommendations = (
   return rankedRecommendations.slice(0, maxLength);
 }
 
-const getRecommendations = async (tracks: any) => {
-  const options = tracks.map((item: any) => {return {trackId: item.track.id}});
+const getRecommendations = async (tracks: any, options: {[key:string]: string} = {}) => {
   const responses = await Promise.all(tracks.map(
-    (item: any) => spotifyGetRecommended(item.track.id))
+    (item: any) => spotifyGetRecommended(item.track.id, options))
   );
 
   const batches = responses.map((res) => res.json());
@@ -291,7 +294,8 @@ const delayedPromise = (delay: number, fn: any) => {
 
 const getRecommendationsRateLimited = async (
   tracks: any,
-  callsPerSecond = 50
+  options: {[key:string]: string} = {},
+  callsPerSecond = 50,
 ) => {
   let offset = 0;
   let delay = 0;
@@ -303,7 +307,7 @@ const getRecommendationsRateLimited = async (
      let batch = tracks.slice(offset, offset+batchSize);
      const delayed = delayedPromise(
        delay,
-       () => getRecommendations(batch)
+       () => getRecommendations(batch, options)
      );
      batches.push(delayed);
      offset += batchSize;
@@ -312,9 +316,6 @@ const getRecommendationsRateLimited = async (
   const responses = await Promise.all(batches);
 
   return responses.flat();
-}
-
-const getTimeString = () => {
 }
 
 export { 
