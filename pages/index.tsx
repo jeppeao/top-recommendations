@@ -6,6 +6,7 @@ import { likedTracks } from "@/recoilAtoms/likedAtom"
 import { useEffect } from "react"
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom"
 import useSavedTracks from "@/hooks/useSavedTracks"
+import InitialView from "@/components/InitialView"
 
 
 export default function Home() {
@@ -25,13 +26,13 @@ export default function Home() {
   }
 
   return (
-    <p>Add some tracks</p>
+    <InitialView/>
   )
 }
 
 export async function getServerSideProps(context: any) {
   const session = await getServerSession(context.req, context.res, authOptions )
-
+  console.log(session)
   if (!session) {
     return {
       redirect: {

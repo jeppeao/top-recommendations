@@ -1,8 +1,7 @@
-import { getProviders, signIn, signOut, useSession } from "next-auth/react";
+import { getProviders, signIn, useSession } from "next-auth/react";
 import { BsSpotify } from "react-icons/bs";
 
 function Login( props: any) {
-  const { data: session, status } = useSession();
 
   return (
     <div className="h-screen flex flex-col justify-center items-center">

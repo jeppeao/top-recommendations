@@ -8,8 +8,10 @@ const useUserProfile = () => {
   useEffect(() => {
     const getUser = async () => {
       const response = await spotifyGetUserProfile();
-      const json = await response.json();
-      setProfile(json);
+      if (response.status === 200) {
+        const json = await response.json();
+        setProfile(json);
+      }
     }  
     getUser();  
   }, [])

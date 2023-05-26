@@ -8,8 +8,10 @@ const useGenres = () => {
   useEffect(() => {
     const getUser = async () => {
       const response = await spotifyGetGenres();
-      const json = await response.json();
-      setGenres(json.genres);
+      if (response.status === 200) {
+        const json = await response.json();
+        setGenres(json.genres);
+      }
     }  
     getUser();  
   }, [])

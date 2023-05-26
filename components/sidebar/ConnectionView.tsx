@@ -1,8 +1,11 @@
 import { useSession, signOut } from "next-auth/react";
 import { BsSpotify } from "react-icons/bs";
+import { MdLogin } from "react-icons/md";
 import SpotiButton from "../SpotiButton";
 import { AiOutlineLogout } from "react-icons/ai"
 import Tooltip from "../Tooltip";
+import { BiLogInCircle } from "react-icons/bi";
+import Link from "next/link";
 
 const ConnectionView = () => {
   const { data: session } = useSession();
@@ -35,8 +38,17 @@ const ConnectionView = () => {
               onClick={signOut} 
               label={"Disconnect"} 
               icon={<AiOutlineLogout size={32}/>}
-            /> : null
-        }
+            /> : 
+            <Tooltip message="go to login page">
+            <Link href="/login">
+              <SpotiButton 
+                onClick={()=> {}} 
+                label={`To login`} 
+                icon={<BiLogInCircle size={32}/>}
+              /> 
+            </Link>
+            </Tooltip>
+          }
 
  
           

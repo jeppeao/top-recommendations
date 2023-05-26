@@ -8,7 +8,6 @@ interface DualRangeSliderProps {
   labels: {min: string, max: string, label: string}
 }
 
-
 const DualRangeSlider = (
   {min, max, onChange, labels}: DualRangeSliderProps
 ) => {
