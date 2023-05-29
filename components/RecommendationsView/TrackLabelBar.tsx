@@ -26,8 +26,8 @@ const TrackLabelBar = ({sticky, tracks}: TrackLabelBarProps) => {
       top-0
     `}>
       <div className={`
-        ${sticky ? 'h-20' : 'h-32'}
-        ${sticky ? 'pt-1' : 'pt-6'}
+        h-24
+        pt-1
         w-full
         bg-gradient-to-b
         from-indigo-950
@@ -55,6 +55,7 @@ const TrackLabelBar = ({sticky, tracks}: TrackLabelBarProps) => {
               text-neutral-400
               col-span-4
               md:col-span-3
+              xl:col-span-2
               space-x-4
               px-8
             ">
@@ -67,6 +68,8 @@ const TrackLabelBar = ({sticky, tracks}: TrackLabelBarProps) => {
               hidden
               md:block
               md:col-span-2
+              xl:col-span-3
+              xl:pl-7
               ml-3
             ">
               Album
@@ -74,6 +77,8 @@ const TrackLabelBar = ({sticky, tracks}: TrackLabelBarProps) => {
             <div className="
               flex
               pr-7
+              col-span-2
+              md:col-span-1
             ">
             <div className={`
               flex

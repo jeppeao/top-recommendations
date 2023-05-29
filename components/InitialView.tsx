@@ -1,6 +1,11 @@
 import { BiLeftArrowAlt } from "react-icons/bi";
 
-const InitialView = () => {
+interface InitialViewProps {
+  isLoading: boolean;
+  numberOfTracks: number;
+}
+
+const InitialView = ({isLoading, numberOfTracks}: InitialViewProps) => {
   return (
     <div className="mt-32">
       <p className="
@@ -11,7 +16,11 @@ const InitialView = () => {
         flex
         justify-center"
       >
-        Status: ready
+        {
+          isLoading 
+          ? "Fetching liked songs from spotify" 
+          : `Fetched ${numberOfTracks} liked songs from spotify`
+        }
       </p>
 
       <div className="
@@ -29,9 +38,16 @@ const InitialView = () => {
         md:text-2xl
         lg:text-4xl
         ">
-          <span><BiLeftArrowAlt size={48}/></span> 
-          <span className="truncate">Load Suggestions to get started</span>
+          { isLoading
+          ? <span className="truncate">Please wait, the music is on it's way</span>
+          : <>
+              <span><BiLeftArrowAlt size={48}/></span> 
+              <span className="truncate">Load Suggestions to get started</span>
+            </>
+          }   
         </h1>
+          
+        
       </div>
     </div>
   )

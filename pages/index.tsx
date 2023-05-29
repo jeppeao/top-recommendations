@@ -11,12 +11,12 @@ import InitialView from "@/components/InitialView"
 
 export default function Home() {
   const [liked, setLiked] = useRecoilState(likedTracks);
-  const data = useSavedTracks();
+  const {tracks, isLoading} = useSavedTracks();
   const recommended = useRecoilValue(recommendedTracks);
 
   useEffect(() => {
-    setLiked(data as any);
-  }, [data])
+    setLiked(tracks as any);
+  }, [tracks])
 
   if (recommended.length > 0) {
   
@@ -26,13 +26,12 @@ export default function Home() {
   }
 
   return (
-    <InitialView/>
+    <InitialView isLoading={isLoading} numberOfTracks={tracks.length}/>
   )
 }
 
 export async function getServerSideProps(context: any) {
   const session = await getServerSession(context.req, context.res, authOptions )
-  console.log(session)
   if (!session) {
     return {
       redirect: {

@@ -13,6 +13,11 @@ interface FetchParameters {
   body?: string
 }
 
+export interface GenreChoice {
+  genre: string;
+  selected: boolean;
+}
+
 export interface UserProfile {
   id: string,
   product: string
@@ -122,7 +127,11 @@ const spotifyPlayTrack = async (songId: string) => {
   const headers = {"Content-Type": "application/json"};
   const body = `{"uris": ["spotify:track:${songId}"]}`;
   const devices = await spotifyGetDevices();
-  const json = await devices.json()
+  const json = await devices.json();
+  if (json === undefined) {
+    alert("No Spotify device found")
+    return false;
+  }
   const options = { device_id: json.devices[0].id }
   return spotifyModify(ENDPOINTS.play, "PUT", options, body, headers);
 }
@@ -256,7 +265,7 @@ const rankRecommendations = (
   const countedRecommendations: CountedRecommendations = {};
 
   for (let rec of recommendations) {
-    const id = rec.id;
+    const id = rec?.id;
     if (countedRecommendations[id]) {
       countedRecommendations[id].count += 1;
     }
@@ -314,8 +323,7 @@ const getRecommendationsRateLimited = async (
      delay += 1000;
    }
   const responses = await Promise.all(batches);
-
-  return responses.flat();
+  return responses.flat().filter((res:any) => res!== undefined);
 }
 
 export { 

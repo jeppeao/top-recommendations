@@ -43,7 +43,7 @@ const TrackCard = ({ track, order, hits, userProduct }: TrackCardProps) => {
         group
       "
     > 
-      <div className="col-span-4 md:col-span-3 flex gap-2 truncate h-full ">
+      <div className="col-span-4 md:col-span-3 xl:col-span-2 flex gap-2 truncate h-full ">
         <div 
           className="
           text-neutral-400
@@ -84,7 +84,7 @@ const TrackCard = ({ track, order, hits, userProduct }: TrackCardProps) => {
         </div>
       </div>
       <div 
-        className="col-span-1 hidden md:flex md:items-center">
+        className="col-span-1 xl:col-span-2 xl:pl-8 hidden md:flex md:items-center">
         <div className="truncate text-ellipsis text-neutral-400 text-sm
         ">
           {track.album.name}

@@ -1,16 +1,19 @@
 import { spotifyGetGenres } from "@/libs/spotify";
 import { useEffect, useState } from "react"
-import { UserProfile } from "@/libs/spotify";
+import { GenreChoice } from "@/libs/spotify";
 
 const useGenres = () => {
-  const [genres, setGenres] = useState<UserProfile>();
+  const [genres, setGenres] = useState<GenreChoice[]>();
 
   useEffect(() => {
     const getUser = async () => {
       const response = await spotifyGetGenres();
       if (response.status === 200) {
         const json = await response.json();
-        setGenres(json.genres);
+        const genreChoices =  json.genres.map((genre: string) => {
+          return {genre, selected: false}
+       });
+        setGenres(genreChoices);
       }
     }  
     getUser();  

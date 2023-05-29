@@ -56,7 +56,7 @@ const TrackHeader = ({tracks}: any) => {
           lg:gap-0
           lg:justify-between
         ">
-          <p className="text-sm font-bold text-neutral-200">from playlist Liked Songs ({liked.length} songs)</p>
+          <p className="text-sm font-bold text-neutral-200">From {liked.length} liked songs</p>
           <h1 className="text-4xl md:text-5xl lg:text-8xl font-bold text-neutral-200">Suggestions</h1>
           <p className="text-sm font-bold text-neutral-200"> {tracks.length} recommendations</p>
         </div>
