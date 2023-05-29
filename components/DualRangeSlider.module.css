@@ -42,11 +42,7 @@
   background-color: var(--color-neutral-400);
   pointer-events: all;
   cursor: pointer;
-  top: 4;
-  height: 16px;
-  width: 16px;
   border: none;
-  border-radius: 50%;
 }
 
 /* For Chrome browsers */

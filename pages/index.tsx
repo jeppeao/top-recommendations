@@ -16,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     setLiked(tracks as any);
-  }, [tracks])
+  }, [tracks, setLiked])
 
   if (recommended.length > 0) {
   

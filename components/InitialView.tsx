@@ -39,7 +39,7 @@ const InitialView = ({isLoading, numberOfTracks}: InitialViewProps) => {
         lg:text-4xl
         ">
           { isLoading
-          ? <span className="truncate">Please wait, the music is on it's way</span>
+          ? <span className="truncate">Please wait, the music is on it&apos;s way</span>
           : <>
               <span><BiLeftArrowAlt size={48}/></span> 
               <span className="truncate">Load Suggestions to get started</span>
