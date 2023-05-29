@@ -14,7 +14,7 @@ const GenreSelector = ({
   onRemoveAll
 }: GenreSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const selected = genreChoices.filter((g: GenreChoice)=> g.selected===true);
   return (
     <>
       <button
@@ -27,10 +27,13 @@ const GenreSelector = ({
           h-8
           hover:text-neutral-300
           hover:bg-neutral-600
+          truncate
+          px-2
+          leading none
     ">
       {
         genreChoices.some((g: GenreChoice) => g.selected === true) 
-        ? "Selected genres"
+        ? `${selected.map((g, GenreChoice) => g.genre).join(", ")}`
         : "All genres"
       }
     </button>

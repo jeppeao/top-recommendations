@@ -1,4 +1,4 @@
-import useGenreChoices from "@/hooks/useGenreChoices";
+import useGenres from "@/hooks/useGenres";
 import { GenreChoice, getRankedRecommendations } from "@/libs/spotify";
 import { likedTracks } from "@/recoilAtoms/likedAtom";
 import { recommendedTracks } from "@/recoilAtoms/recommendedAtom";
@@ -14,16 +14,20 @@ const OptionsView = () => {
   const [minPopularity, setMinPopularity] = useState(0);
   const [maxPopularity, setMaxPopularity] = useState(100);
   const [chosenGenres, setChosenGenres] = useState<GenreChoice[]>([]);
-  const [chosenSongs, setChosenSongs] = useState<any>([]);
+  const [chosenSongs, setChosenSongs] = useState(tracks);
+  const genres = useGenres() || [];
 
   useEffect(() => {
-    setChosenSongs(tracks); 
+    if (genres.length > 0) {
+      setChosenGenres(genres);
+    }
+  }, [genres]);
+
+  useEffect(() => {
+    if (tracks.length > 0 ) {
+      setChosenSongs(tracks);
+    }
   }, [tracks]);
-
-  const genreChoices = useGenreChoices() || [];
-  useEffect(() => {
-    setChosenGenres(genreChoices);
-  }, [genreChoices]);
 
   const onSelectGenre = (genreChoice: GenreChoice) => {
     const chosen = chosenGenres.map((g: GenreChoice) => {
@@ -64,6 +68,7 @@ const OptionsView = () => {
 
   const onGetRecommendations = async () => {
     setIsLoading(true);
+
     const ranked = await getRankedRecommendations(
       chosenSongs, 
       tracks, 

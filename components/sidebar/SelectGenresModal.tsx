@@ -74,6 +74,7 @@ const SelectGenresModal = ({
       ">
         {genreChoices.map((g: GenreChoice) => 
           <button 
+            key={g.genre}
             onClick={() => onClick(g)}
             className={`
             ${g.selected ? "bg-green-800": "bg-neutral-700"}
