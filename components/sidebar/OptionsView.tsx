@@ -70,7 +70,7 @@ const OptionsView = () => {
     setIsLoading(true);
 
     const ranked = await getRankedRecommendations(
-      chosenSongs, 
+      chosenSongs.slice(0,20), 
       tracks, 
       recommendationsOptions
     );

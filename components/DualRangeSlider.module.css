@@ -1,27 +1,7 @@
-.thumb {
-  pointer-events: none;
-  position: absolute;
-  height: 0;
-  width: 100px;
-  outline: none;
-  top: 2px;
-}
-
-.thumb::-moz-range-thumb,
-.thumb::-webkit-slider-thumb {
-  background-color: var(--color-neutral-400);
-  pointer-events: all;
-  cursor: pointer;
-  top: 4;
-  height: 16px;
-  width: 16px;
-  border: none;
-  border-radius: 50%;
-}
-
 .slider {
   position: relative;
   width: 200px;
+
 }
 
 .sliderTrack,
@@ -41,4 +21,42 @@
   background-color: var(--color-violet-400);
   box-shadow: 0px 0px 3px var(--color-violet-400);
   z-index: 2;
+}
+
+.thumb,
+.thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+.thumb {
+  pointer-events: none;
+  position: absolute;
+  height: 0;
+  width: 100px;
+  outline: none;
+  top: 2px;
+}
+
+.thumb,
+.thumb::-moz-range-thumb {
+  background-color: var(--color-neutral-400);
+  pointer-events: all;
+  cursor: pointer;
+  top: 4;
+  height: 16px;
+  width: 16px;
+  border: none;
+  border-radius: 50%;
+}
+
+/* For Chrome browsers */
+.thumb::-webkit-slider-thumb {
+  background-color: var(--color-neutral-400);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  top: 4;
+  pointer-events: all;
 }

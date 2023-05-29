@@ -69,6 +69,7 @@ const SelectGenresModal = ({
           justify-center
           gap-2
           overflow-scroll
+          overflow-y-hidden
           py-2
           mx-2
       ">

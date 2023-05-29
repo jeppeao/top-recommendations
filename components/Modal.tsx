@@ -42,7 +42,7 @@ const Modal = ({ isOpen, onClose, body }: ModalProps ) => {
             className="
             hover:opacity-80
           ">
-            <AiOutlineClose size={16} />
+            <AiOutlineClose size={20} color={"lightgrey"}/>
             
           </button>
         </div>

@@ -94,7 +94,7 @@ const TrackCard = ({ track, order, hits, userProduct }: TrackCardProps) => {
         <button>
           {liked ? 
             <TbHeartFilled size={20} color={"lightgreen"} onClick={onUnlike}/> : 
-            <TbHeart size={20} onClick={onLike} className="hidden group-hover:block"/>}
+            <TbHeart size={20} onClick={onLike} color={"lightgrey"} className="hidden group-hover:block"/>}
         </button>
       </div>
       <div className="flex justify-end items-center pr-8">
