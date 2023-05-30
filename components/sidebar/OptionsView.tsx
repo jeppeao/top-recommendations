@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import DualRangeSlider from "../DualRangeSlider";
 import GenreSelector from "./GenreSelector";
+import SongSelector from "./SongSelector";
 
 const OptionsView = () => {
   const tracks = useRecoilValue(likedTracks);
@@ -14,7 +15,7 @@ const OptionsView = () => {
   const [minPopularity, setMinPopularity] = useState(0);
   const [maxPopularity, setMaxPopularity] = useState(100);
   const [chosenGenres, setChosenGenres] = useState<GenreChoice[]>([]);
-  const [chosenSongs, setChosenSongs] = useState(tracks);
+  const [chosenSongs, setChosenSongs] = useState<any>(tracks);
   const genres = useGenres() || [];
 
   useEffect(() => {
@@ -28,6 +29,26 @@ const OptionsView = () => {
       setChosenSongs(tracks);
     }
   }, [tracks]);
+
+  const onResetSongs = () => {
+    setChosenSongs(tracks);
+  }
+
+  const onClearSongs = () => {
+    setChosenSongs([]);
+  }
+
+  const onSelectSong = (song:any) => {
+    const isChosen = chosenSongs.some((i: any) =>
+      i.track.id === song.track.id
+    );
+
+    isChosen 
+      ? setChosenSongs(chosenSongs.filter(
+        (s: any) => s.track.id !== song.track.id
+      ))
+      : setChosenSongs([...chosenSongs, song]);
+  }
 
   const onSelectGenre = (genreChoice: GenreChoice) => {
     const chosen = chosenGenres.map((g: GenreChoice) => {
@@ -116,6 +137,13 @@ const OptionsView = () => {
         genreChoices={chosenGenres} 
         onSelect={onSelectGenre}
         onRemoveAll={onRemoveAllGenres}
+      />
+      <SongSelector 
+        songChoices={chosenSongs} 
+        onSelect={onSelectSong}
+        onReset={onResetSongs}
+        songs={tracks}
+        onClearSongs={onClearSongs}
       />
     </div>
   );
