@@ -98,6 +98,7 @@ const SelectSongsModal = ({
           songs.map((song:any, i: number) => {
             return (
               <div
+              key = {i}
                 onClick={() => onSelect(song)}
                 className="
                   grid 
