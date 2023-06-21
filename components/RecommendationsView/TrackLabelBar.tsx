@@ -13,11 +13,16 @@ interface TrackLabelBarProps {
 
 const TrackLabelBar = ({sticky, tracks}: TrackLabelBarProps) => {
   const profile = useUserProfile();
-  
+  const isPremium = profile?.product === "premium";
+
   const onExportToSpotify = async () => {
     if (profile) {
       spotifyPlaylistFromTracks(profile.id, tracks);
     }
+  }
+
+  const warningOnClick = () => {
+    alert("Spotify only allows this action for premium accounts")
   }
 
   return (
@@ -40,7 +45,10 @@ const TrackLabelBar = ({sticky, tracks}: TrackLabelBarProps) => {
         <div className="flex justify-end">
           <Tooltip message={"add all songs to new playlist"}>
           <SpotiButton 
-            onClick={onExportToSpotify} 
+            onClick={ isPremium 
+              ? () => { onExportToSpotify(); }
+              : () => warningOnClick()
+            } 
             icon={<RiPlayListAddLine size={32}/>}
             label={"Export recommendations to spotify"}
           />

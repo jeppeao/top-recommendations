@@ -27,7 +27,7 @@ const TrackCard = ({ track, order, hits, userProduct }: TrackCardProps) => {
   }
 
   const warningOnClick = () => {
-    alert("Spotify only allows this control with premium accounts")
+    alert("Spotify only allows this action for premium accounts")
   }
 
   return (
